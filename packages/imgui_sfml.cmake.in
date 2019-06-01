@@ -1,0 +1,33 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(imgui_sfml)
+
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Game section
+aux_source_directory(. SRC_FILE)
+aux_source_directory(imgui SRC_FILE)
+file(GLOB HDR_FILE "../*.h*")
+include_directories(imgui)
+add_definitions(-DIMGUI_USER_CONFIG="imconfig-SFML.h")
+add_library(${PROJECT_NAME} ${SRC_FILE} ${HDR_FILE})
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+
+INSTALL(FILES 
+    ../imconfig-SFML.h
+    ../imgui-SFML.h
+    ../imgui-SFML_export.h
+    imgui/imgui.h
+    imgui/imgui_internal.h
+    imgui/imstb_rectpack.h
+    imgui/imstb_textedit.h
+    imgui/imstb_truetype.h
+    imgui/imconfig.h
+    DESTINATION include
+)
+
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)

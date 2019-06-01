@@ -3,7 +3,7 @@ if (NOT sfml_version)
 endif()
 set(sfml_repo "https://github.com/SFML/SFML")
 
-if (NOT EXISTS ${scpm_work_dir}/SFML-${sfml_version})
+if (NOT EXISTS ${scpm_work_dir}/SFML-${sfml_version}.installed)
     scpm_download_github_archive("${sfml_repo}" "${sfml_version}")
     set(sfml_build_flags
         -DBUILD_SHARED_LIBS=NO
@@ -12,6 +12,7 @@ if (NOT EXISTS ${scpm_work_dir}/SFML-${sfml_version})
         -DSFML_DEPENDENCIES_INSTALL_PREFIX=${scpm_root_dir}/Library/Frameworks
     )
     scpm_build_cmake("${scpm_work_dir}/SFML-${sfml_version}" "${sfml_build_flags}")
+    file(WRITE ${scpm_work_dir}/SFML-${sfml_version}.installed "")
 endif()
 
 set(sfml_lib

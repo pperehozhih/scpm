@@ -5,11 +5,11 @@ project(imgui_sfml)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Game section
-aux_source_directory(. SRC_FILE)
+aux_source_directory(.. SRC_FILE)
 aux_source_directory(imgui SRC_FILE)
 file(GLOB HDR_FILE "../*.h*")
-include_directories(imgui)
-add_definitions(-DIMGUI_USER_CONFIG="imconfig-SFML.h")
+include_directories(.. imgui)
+add_definitions(-DIMGUI_USER_CONFIG=<imconfig-SFML.h>)
 add_library(${PROJECT_NAME} ${SRC_FILE} ${HDR_FILE})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 

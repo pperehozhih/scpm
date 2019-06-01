@@ -9,12 +9,11 @@ if (NOT imgui_sfml_version)
 endif()
 set(imgui_sfml_repo "https://github.com/eliasdaler/imgui-sfml")
 
-if (NOT EXISTS ${scpm_work_dir}/imgui-sfml_${imgui_sfml_version})
+if (NOT EXISTS ${scpm_work_dir}/imgui-sfml_${imgui_sfml_version}.installed)
         scpm_clone_git("${imgui_sfml_repo}" "v${imgui_sfml_version}")
         execute_process(
             COMMAND ${CMAKE_COMMAND} -E rename "${scpm_work_dir}/imgui-sfml" "${scpm_work_dir}/imgui-sfml_${imgui_sfml_version}"
         )
-        file(WRITE "${scpm_work_dir}/imgui-sfml_${imgui_sfml_version}/internal/main.cpp" "#include \"../imconfig-SFML.h\"\n#include \"../imgui-SFML.cpp\"")
         file(DOWNLOAD "${scpm_server}/packages/${package_name}.cmake.in" "${scpm_work_dir}/imgui-sfml_${imgui_sfml_version}/internal/CMakeLists.txt")
         message("[SCPM] clone repos ${url}")
         execute_process(
@@ -26,6 +25,7 @@ if (NOT EXISTS ${scpm_work_dir}/imgui-sfml_${imgui_sfml_version})
             message(FATAL_ERROR "[SCPM] cannot clone repos https://github.com/ocornut/imgui")
         endif()
         scpm_build_cmake("${scpm_work_dir}/imgui-sfml_${imgui_sfml_version}/internal" "-DCMAKE_CXX_FLAGS=-I${scpm_root_dir}/include")
+        file(WRITE ${scpm_work_dir}/imgui-sfml_${imgui_sfml_version}.installed "")
 endif()
 
 set(imgui_sfml_lib

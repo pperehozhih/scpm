@@ -1,4 +1,4 @@
-version: '{build}'
+version: '0.0.1.{build}'
 branches:
   only:
   - master
@@ -45,7 +45,3 @@ build:
   project: c:\projects\cmake-init\build\test.sln
   verbosity: minimal
   parallel: true
-
-artifacts:
-  - path: myapp.zip
-    name: MyApp

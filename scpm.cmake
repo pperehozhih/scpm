@@ -69,7 +69,7 @@ function(scpm_build_cmake directory buildargs)
         endif()
     else()
         execute_process(
-                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DDEBUG_POSTFIX=d ${buildargs}
+                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_DEBUG_POSTFIX=d ${buildargs}
                 WORKING_DIRECTORY "${directory}/build"
                 RESULT_VARIABLE scpm_build_cmake_result
         )

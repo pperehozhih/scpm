@@ -35,6 +35,7 @@ before_build:
     cd build
     cmake --version
     cmake ../test/test-sfml-imgui -G %generator%
+    7z a myapp.zip c:\projects\cmake-init\build\root
 
 after_build:
 - cmd: |-

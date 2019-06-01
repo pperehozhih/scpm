@@ -36,7 +36,15 @@ before_build:
     cmake --version
     cmake ../test/test-sfml-imgui -G %generator%
 
+after_build:
+- cmd: |-
+    7z a myapp.zip c:\projects\cmake-init\build\root
+
 build:
-  project: c:\projects\cmake-init\build\template.sln
+  project: c:\projects\cmake-init\build\test.sln
   verbosity: minimal
   parallel: true
+
+artifacts:
+  - path: myapp.zip
+    name: MyApp

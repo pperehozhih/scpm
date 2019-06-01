@@ -1,5 +1,8 @@
+if (NOT scpm_server_branch)
+    set(scpm_server_branch "master")
+endif()
 if (NOT scpm_server)
-    set(scpm_server "https://raw.githubusercontent.com/pperehozhih/scpm/master")
+    set(scpm_server "https://raw.githubusercontent.com/pperehozhih/scpm/${scpm_server_branch}")
 endif()
 
 function(scpm_download_github_archive url filename)

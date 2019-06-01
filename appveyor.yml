@@ -35,11 +35,11 @@ before_build:
     cd build
     cmake --version
     cmake ../test/test-sfml-imgui -G %generator%
-    7z a myapp.zip c:\projects\cmake-init\build\root
 
 after_build:
 - cmd: |-
-    7z a myapp.zip c:\projects\cmake-init\build\root
+    7z a root.zip c:\projects\cmake-init\build\root
+    appveyor PushArtifact root.zip
 
 build:
   project: c:\projects\cmake-init\build\test.sln

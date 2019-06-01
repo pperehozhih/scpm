@@ -3,12 +3,12 @@ if (NOT scpm_server)
 endif()
 
 function(scpm_download_github_archive url filename)
-    file(DOWNLOAD ${url}/archives/${filename}.zip ${SCPM_WORK_DIR}/${filename}.zip)
+    file(DOWNLOAD ${url}/archive/${filename}.zip ${SCPM_WORK_DIR}/${filename}.zip)
     execute_process(
             COMMAND ${CMAKE_COMMAND} -E tar xzf ${SCPM_WORK_DIR}/${filename}.zip
             WORKING_DIRECTORY ${SCPM_WORK_DIR}
     )
-endfunction(scpm_download)
+endfunction(scpm_download_github_archive)
 
 function(scpm_install package_name package_version)
     set(SCPM_WORK_DIR ${CMAKE_CURRENT_BINARY_DIR}/scpm)

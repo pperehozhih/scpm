@@ -23,3 +23,12 @@ set(sfml_lib
     sfml-window-s
     CACHE STRING ""
 )
+
+set(sfml_lib_debug
+    sfml-audio-s-d
+    sfml-graphics-s-d
+    sfml-network-s-d
+    sfml-system-s-d
+    sfml-window-s-d
+    CACHE STRING ""
+)

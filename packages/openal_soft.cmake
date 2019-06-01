@@ -14,3 +14,7 @@ set(openal_lib
     openal
     CACHE STRING ""
 )
+set(openal_lib_debug
+    openald
+    CACHE STRING ""
+)

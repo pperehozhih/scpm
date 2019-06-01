@@ -13,3 +13,7 @@ set(expat_lib
     expat
     CACHE STRING ""
 )
+set(expat_lib_debug
+    expatd
+    CACHE STRING ""
+)

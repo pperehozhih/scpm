@@ -14,3 +14,8 @@ set(imgui_lib
 	imgui
 	CACHE STRING ""
 )
+
+set(imgui_lib_debug
+	imguid
+	CACHE STRING ""
+)

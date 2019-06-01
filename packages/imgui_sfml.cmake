@@ -32,3 +32,7 @@ set(imgui_sfml_lib
     imgui_sfml
     CACHE STRING ""
 )
+set(imgui_sfml_lib_debug
+    imgui_sfmld
+    CACHE STRING ""
+)

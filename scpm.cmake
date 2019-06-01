@@ -17,7 +17,7 @@ function(scpm_download_github_archive url filename)
     file(REMOVE ${scpm_work_dir}/${filename}.zip)
 endfunction(scpm_download_github_archive)
 
-function(scpm_build_cmake directory)
+function(scpm_build_cmake directory buildargs)
     message("[SCPM] begin build ${directory}")
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E make_directory "${directory}/build"
@@ -26,7 +26,7 @@ function(scpm_build_cmake directory)
     message("[SCPM] begin build ${directory}")
     if (NOT MSVC)
         execute_process(
-                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=Release
+                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=Release ${buildargs}
                 WORKING_DIRECTORY "${directory}/build"
         )
         message("[SCPM] begin install ${directory}")
@@ -36,7 +36,7 @@ function(scpm_build_cmake directory)
         )
     else()
         execute_process(
-                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DDEBUG_POSTFIX=d
+                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DDEBUG_POSTFIX=d ${buildargs}
                 WORKING_DIRECTORY "${directory}/build"
         )
         message("[SCPM] begin install ${directory} Debug")

@@ -5,7 +5,7 @@ if (NOT EXISTS ${SCPM_WORK_DIR}/imgui)
         file(DOWNLOAD "${IMGUI_REPO}/archive/v${IMGUI_VERSION}.zip" "${SCPM_WORK_DIR}/imgui-${IMGUI_VERSION}.zip")
         execute_process(
                 COMMAND ${CMAKE_COMMAND} -E tar xzf "${SCPM_WORK_DIR}/imgui-${IMGUI_VERSION}.zip"
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                WORKING_DIRECTORY ${SCPM_WORK_DIR}
         )
         execute_process(
                 COMMAND ${CMAKE_COMMAND} -E rename "${SCPM_WORK_DIR}/imgui-${IMGUI_VERSION}" "${SCPM_WORK_DIR}/imgui"

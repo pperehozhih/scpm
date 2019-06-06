@@ -11,6 +11,22 @@ if (NOT scpm_root_dir)
     set(scpm_root_dir ${CMAKE_CURRENT_BINARY_DIR}/root)
 endif()
 
+function(scpm_download_and_extract_archive url filename)
+    message("[SCPM] download archive ${url}/${filename} to ${scpm_work_dir}/${filename}")
+    file(DOWNLOAD ${url}/${filename} ${scpm_work_dir}/${filename})
+    message("[SCPM] extract archive ${scpm_work_dir}/${filename}")
+    execute_process(
+            COMMAND ${CMAKE_COMMAND} -E tar xzf ${scpm_work_dir}/${filename}
+            WORKING_DIRECTORY ${scpm_work_dir}
+            RESULT_VARIABLE scpm_download_and_extract_archive_result
+    )
+    if (NOT scpm_download_and_extract_archive_result EQUAL "0")
+        message(FATAL_ERROR "[SCPM] cannot extract archive ${scpm_work_dir}/${filename}")
+    endif()
+    message("[SCPM] remove archive ${scpm_work_dir}/${filename}")
+    file(REMOVE ${scpm_work_dir}/${filename})
+endfunction(scpm_download_and_extract_archive)
+
 function(scpm_download_github_archive url filename)
     message("[SCPM] download archive ${url}/archive/${filename}.zip to ${scpm_work_dir}/${filename}.zip")
     file(DOWNLOAD ${url}/archive/${filename}.zip ${scpm_work_dir}/${filename}.zip)
@@ -42,16 +58,34 @@ function(scpm_clone_git url branch)
     endif()
 endfunction(scpm_clone_git)
 
+function(scpm_clone_git_submodule_update directory)
+    message("[SCPM] git submodule update ${directory}")
+    execute_process(
+            COMMAND git submodule update --init --recursive
+            WORKING_DIRECTORY ${directory}
+            RESULT_VARIABLE scpm_clone_git_submodule_update_result
+    )
+    if (NOT scpm_clone_git_submodule_update_result EQUAL "0")
+        message(FATAL_ERROR "[SCPM] cannot update repos ${directory}")
+    endif()
+endfunction(scpm_clone_git_submodule_update)
+
+function(scpm_build_configure directory buildargs)
+endfunction(scpm_build_configure)
+
 function(scpm_build_cmake directory buildargs)
-    message("[SCPM] begin build ${directory}")
+    message("[SCPM] begin build ${directory} for ${CMAKE_SYSTEM_NAME}")
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E make_directory "${directory}/build"
         WORKING_DIRECTORY "${directory}"
     )
+    if (CMAKE_TOOLCHAIN_FILE)
+        set(buildargs ${buildargs} "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}")
+    endif()
     message("[SCPM] begin generate ${directory}")
-    if (NOT MSVC)
+    if (NOT scpm_platform_windows)
         execute_process(
-                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=Release ${buildargs}
+                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=Release -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
                 WORKING_DIRECTORY "${directory}/build"
                 RESULT_VARIABLE scpm_build_cmake_result
         )
@@ -98,13 +132,58 @@ function(scpm_build_cmake directory buildargs)
 endfunction(scpm_build_cmake)
 
 
-function(scpm_install package_name package_version)
-    if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/scpm/${package_name}${package_version}.cmake)
+function(scpm_install package_name)
+    if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/scpm/${package_name}.cmake)
         message("[SCPM] download file ${scpm_server}/packages/${package_name}.cmake")
-        file(DOWNLOAD ${scpm_server}/packages/${package_name}.cmake ${scpm_work_dir}/${package_name}${package_version}.cmake)
-        if (package_version)
-            set("${package_name}_version" ${package_version})
-        endif()
-        include(${scpm_work_dir}/${package_name}${package_version}.cmake)
+        file(DOWNLOAD ${scpm_server}/packages/${package_name}.cmake ${scpm_work_dir}/${package_name}.cmake)
     endif()
+    include(${scpm_work_dir}/${package_name}.cmake)
 endfunction(scpm_install)
+
+function(scpm_link_target)
+    set(options "")
+    set(one_value_args TARGET)
+    set(multi_value_args LIBS)
+    cmake_parse_arguments(scpm_link_target "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+    set(dependencies "")
+    foreach(lib ${scpm_link_target_LIBS})
+        set(dependencies ${dependencies} ${lib})
+        foreach(depends ${scpm_${lib}_depends})
+            set(dependencies ${dependencies} ${depends})
+        endforeach(depends ${scpm_${lib}_depends})
+        
+    endforeach(lib ${scpm_link_target_LIBS})
+    list(REMOVE_DUPLICATES dependencies)
+    set(linklibs "")
+    foreach(lib ${dependencies})
+        if (scpm_platform_windows)
+            foreach(depends ${scpm_${lib}_lib})
+                target_link_libraries(${scpm_link_target_TARGET} optimized ${depends})
+            endforeach(depends ${scpm_${lib}_lib})
+            foreach(depends ${scpm_${lib}_lib_debug})
+                target_link_libraries(${scpm_link_target_TARGET} debug ${depends})
+            endforeach(depends ${scpm_${lib}_lib})
+        else(scpm_platform_windows)
+            foreach(depends ${scpm_${lib}_lib})
+                target_link_libraries(${scpm_link_target_TARGET} ${depends})
+                message("${depends}")
+            endforeach(depends ${scpm_${lib}_lib})
+        endif(scpm_platform_windows)
+    endforeach(lib ${dependencies})
+endfunction(scpm_link_target)
+
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+    set(scpm_platform_windows 1)
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+    set(scpm_platform_linux 1)
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+    if (IOS)
+        set(scpm_platform_ios 1)
+    else(IOS)
+        set(scpm_platform_macos 1)
+    endif(IOS)
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Android")
+    set(scpm_platform_android 1)
+# else()
+#     message(FATAL_ERROR "Unsupported operating system or environment")
+endif()

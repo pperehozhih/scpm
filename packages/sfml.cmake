@@ -1,7 +1,7 @@
 if (NOT scpm_sfml_version)
     set(scpm_sfml_version "2.5.1" CACHE STRING "")
 endif()
-if (scpm_platform_android)
+if (scpm_platform_android OR scpm_platform_windows)
     scpm_install(freetype)
     scpm_install(vorbis)
     scpm_install(flac)
@@ -45,6 +45,14 @@ set(scpm_sfml_lib_debug
 )
 
 if (scpm_platform_android)
+    set(scpm_sfml_depends
+        freetype
+        vorbis
+        flac
+        openal_soft
+        CACHE STRING ""
+    )
+elseif(scpm_platform_windows)
     set(scpm_sfml_depends
         freetype
         vorbis

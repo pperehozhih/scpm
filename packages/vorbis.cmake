@@ -6,7 +6,7 @@ set(scpm_vorbis_repo "https://github.com/xiph/vorbis")
 
 if (NOT EXISTS ${scpm_work_dir}/vorbis-${scpm_vorbis_version}.installed)
     scpm_download_github_archive("${scpm_vorbis_repo}" "v${scpm_vorbis_version}")
-    scpm_build_cmake("${scpm_work_dir}/vorbis-${scpm_vorbis_version}" "")
+    scpm_build_cmake("${scpm_work_dir}/vorbis-${scpm_vorbis_version}")
     file(WRITE ${scpm_work_dir}/vorbis-${scpm_vorbis_version}.installed "")
 endif()
 

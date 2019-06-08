@@ -9,7 +9,7 @@ if (NOT EXISTS ${scpm_work_dir}/flac-${scpm_flac_version}.installed)
     file(WRITE "${scpm_work_dir}/flac-${scpm_flac_version}/src/utils/CMakeLists.txt" "")
     set(buildargs "-DBUILD_EXAMPLES=OFF" "-DBUILD_TESTING=OFF")
     scpm_build_cmake("${scpm_work_dir}/flac-${scpm_flac_version}" "${buildargs}")
-    file(WRITE ${scpm_work_dir}/flac-${scpm_flac_version}.installed "")
+    file(WRITE ${scpm_work_dir}/flac-${scpm_flac_version}.installed)
 endif()
 
 set(scpm_flac_lib

@@ -5,7 +5,7 @@ set(scpm_ogg_repo "https://github.com/xiph/ogg")
 
 if (NOT EXISTS ${scpm_work_dir}/ogg-${scpm_ogg_version}.installed)
     scpm_download_github_archive("${scpm_ogg_repo}" "v${scpm_ogg_version}")
-    scpm_build_cmake("${scpm_work_dir}/ogg-${scpm_ogg_version}" "")
+    scpm_build_cmake("${scpm_work_dir}/ogg-${scpm_ogg_version}")
     file(WRITE ${scpm_work_dir}/ogg-${scpm_ogg_version}.installed "")
 endif()
 

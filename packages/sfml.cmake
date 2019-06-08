@@ -17,14 +17,35 @@ if (NOT EXISTS ${scpm_work_dir}/SFML-${scpm_sfml_version}.installed)
         -DSFML_DEPENDENCIES_INSTALL_PREFIX=${scpm_root_dir}/Frameworks
         -DSFML_USE_SYSTEM_DEPS=ON
     )
+    if (scpm_platform_ios)
+        string(REPLACE ";" "\\\\;" ARCHS_STRING "${ARCHS}")
+        set(sfml_build_flags ${sfml_build_flags} "-DCMAKE_OSX_ARCHITECTURES=${ARCHS_STRING}")
+        set(sfml_build_flags ${sfml_build_flags} "-DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT}")
+        message(${sfml_build_flags})
+        file(READ "${scpm_work_dir}/SFML-${scpm_sfml_version}/cmake/Config.cmake" cmakefile_content)
+        string(REPLACE "STREQUAL \"Darwin\""
+            "STREQUAL \"${CMAKE_SYSTEM_NAME}\"" cmakefile_content "${cmakefile_content}")
+        file(WRITE "${scpm_work_dir}/SFML-${scpm_sfml_version}/cmake/Config.cmake" "${cmakefile_content}")
+    endif()
     # Patch CMakeLists for android install location
     file(READ "${scpm_work_dir}/SFML-${scpm_sfml_version}/CMakeLists.txt" cmakefile_content)
     string(REPLACE "\${CMAKE_ANDROID_NDK}/sources/third_party/sfml"
-       "${scpm_root_dir}" cmakefile_content ${cmakefile_content})
+       "${scpm_root_dir}" cmakefile_content "${cmakefile_content}")
     string(REPLACE "/\${CMAKE_ANDROID_ARCH_ABI}"
-       "" cmakefile_content ${cmakefile_content})
-    file(WRITE "${scpm_work_dir}/SFML-${scpm_sfml_version}/CMakeLists.txt" ${cmakefile_content})
-    scpm_build_cmake("${scpm_work_dir}/SFML-${scpm_sfml_version}" "${sfml_build_flags}")
+       "" cmakefile_content "${cmakefile_content}")
+    file(WRITE "${scpm_work_dir}/SFML-${scpm_sfml_version}/CMakeLists.txt" "${cmakefile_content}")
+
+    # Patch cmake for debug and static postfix
+    file(READ "${scpm_work_dir}/SFML-${scpm_sfml_version}/cmake/Macros.cmake" cmakefile_content)
+    string(REPLACE "POSTFIX -s-d"
+       "POSTFIX d" cmakefile_content "${cmakefile_content}")
+    string(REPLACE "POSTFIX -d"
+       "POSTFIX d" cmakefile_content "${cmakefile_content}")
+    string(REPLACE "POSTFIX -s"
+       "POSTFIX \"\"" cmakefile_content "${cmakefile_content}")
+    file(WRITE "${scpm_work_dir}/SFML-${scpm_sfml_version}/cmake/Macros.cmake" "${cmakefile_content}")
+
+    scpm_build_cmake("${scpm_work_dir}/SFML-${scpm_sfml_version}" ${sfml_build_flags})
     file(WRITE ${scpm_work_dir}/SFML-${scpm_sfml_version}.installed "")
 endif()
 
@@ -37,11 +58,11 @@ set(scpm_sfml_lib
 )
 
 set(scpm_sfml_lib_debug
-    sfml-audio-s
-    sfml-graphics-s
-    sfml-network-s
-    sfml-system-s
-    sfml-window-s
+    sfml-audiod
+    sfml-graphicsd
+    sfml-networkd
+    sfml-systemd
+    sfml-windowd
 )
 
 if (scpm_platform_android)
@@ -77,6 +98,17 @@ if(scpm_platform_macos)
         "-framework  Carbon"
         "-ObjC"
     )
+elseif(scpm_platform_ios)
+    set(scpm_sfml_lib ${scpm_sfml_lib}
+        "-framework  OpenGLES"
+        "-framework  OpenAL"
+        "-framework  UIKit"
+        "-framework  CoreFoundation"
+        "-framework  Foundation"
+        "-framework  CoreMotion"
+        "-framework  QuartzCore"
+        "-ObjC"
+    )
 elseif (scpm_platform_windows)
     set(scpm_sfml_lib ${scpm_sfml_lib}
         "OpenGL32"
@@ -89,6 +121,10 @@ elseif (scpm_platform_android)
         android
         log 
         EGL
+        z
+        OpenSLES
+        openal
+        stdc++
     )
     if (scpm_sfml_gles_one)
         set(scpm_sfml_lib ${scpm_sfml_lib}

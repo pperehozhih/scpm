@@ -47,7 +47,7 @@ function(scpm_clone_git url branch)
     if (NOT branch)
         set(branch "master")
     endif()
-    message("[SCPM] clone repos ${url}")
+    message("[SCPM] clone repos ${url} ${branch}")
     execute_process(
             COMMAND git clone -b ${branch} --depth 1 ${url}
             WORKING_DIRECTORY ${scpm_work_dir}
@@ -65,12 +65,46 @@ function(scpm_clone_git_submodule_update directory)
             WORKING_DIRECTORY ${directory}
             RESULT_VARIABLE scpm_clone_git_submodule_update_result
     )
-    if (NOT scpm_clone_git_submodule_update_result EQUAL "0")
-        message(FATAL_ERROR "[SCPM] cannot update repos ${directory}")
-    endif()
 endfunction(scpm_clone_git_submodule_update)
 
-function(scpm_build_configure directory buildargs)
+function(scpm_build_configure)
+    list(GET ARGN 0 directory)
+    list(REMOVE_AT ARGN 0)
+    set (buildargs ${ARGN})
+    message("[SCPM] begin build ${directory} with configure")
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${directory}/scpm_build_dir"
+        WORKING_DIRECTORY "${directory}"
+    )
+    set(buildargs ${buildargs} --prefix=${scpm_root_dir})
+    find_program(SH_PROGRAM sh)
+    if (NOT SH_PROGRAM)
+        message(FATAL_ERROR "[SCPM] cannot found sh")
+    endif()
+    execute_process(
+        COMMAND ${SH_PROGRAM} ../configure ${buildargs}
+        WORKING_DIRECTORY "${directory}/scpm_build_dir"
+        RESULT_VARIABLE scpm_build_configure_configure_result
+    )
+    if (NOT scpm_build_configure_configure_result EQUAL "0")
+        message(FATAL_ERROR "[SCPM] cannot configure repos ${directory}")
+    endif()
+    execute_process(
+        COMMAND make
+        WORKING_DIRECTORY "${directory}/scpm_build_dir"
+        RESULT_VARIABLE scpm_build_configure_make_result
+    )
+    if (NOT scpm_build_configure_make_result EQUAL "0")
+        message(FATAL_ERROR "[SCPM] cannot make repos ${directory}")
+    endif()
+    execute_process(
+        COMMAND make install
+        WORKING_DIRECTORY "${directory}/scpm_build_dir"
+        RESULT_VARIABLE scpm_build_configure_make_install_result
+    )
+    if (NOT scpm_build_configure_make_install_result EQUAL "0")
+        message(FATAL_ERROR "[SCPM] cannot make repos ${directory}")
+    endif()
 endfunction(scpm_build_configure)
 
 function(scpm_build_cmake)
@@ -79,7 +113,7 @@ function(scpm_build_cmake)
     set (buildargs ${ARGN})
     message("[SCPM] begin build ${directory} for ${CMAKE_SYSTEM_NAME}")
     execute_process(
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${directory}/build"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${directory}/scpm_build_dir"
         WORKING_DIRECTORY "${directory}"
     )
     if (CMAKE_TOOLCHAIN_FILE)
@@ -114,8 +148,8 @@ function(scpm_build_cmake)
     message("[SCPM] begin generate ${directory} ${buildargs}")
     if (NOT scpm_platform_windows)
         execute_process(
-                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=Release -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
-                WORKING_DIRECTORY "${directory}/build"
+                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
+                WORKING_DIRECTORY "${directory}/scpm_build_dir"
                 RESULT_VARIABLE scpm_build_cmake_result
         )
         if (NOT scpm_build_cmake_result EQUAL "0")
@@ -124,7 +158,7 @@ function(scpm_build_cmake)
         message("[SCPM] begin build and install ${directory}")
         execute_process(
                 COMMAND ${CMAKE_COMMAND} --build . --target install --config Release
-                WORKING_DIRECTORY "${directory}/build"
+                WORKING_DIRECTORY "${directory}/scpm_build_dir"
                 RESULT_VARIABLE scpm_build_cmake_result
         )
         if (NOT scpm_build_cmake_result EQUAL "0")
@@ -133,7 +167,7 @@ function(scpm_build_cmake)
     else()
         execute_process(
                 COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_DEBUG_POSTFIX=d ${buildargs}
-                WORKING_DIRECTORY "${directory}/build"
+                WORKING_DIRECTORY "${directory}/scpm_build_dir"
                 RESULT_VARIABLE scpm_build_cmake_result
         )
         if (NOT scpm_build_cmake_result EQUAL "0")
@@ -142,7 +176,7 @@ function(scpm_build_cmake)
         message("[SCPM] begin build and install ${directory} Debug")
         execute_process(
                 COMMAND ${CMAKE_COMMAND} --build . --target install --config Debug
-                WORKING_DIRECTORY "${directory}/build"
+                WORKING_DIRECTORY "${directory}/scpm_build_dir"
                 RESULT_VARIABLE scpm_build_cmake_result
         )
         if (NOT scpm_build_cmake_result EQUAL "0")
@@ -151,7 +185,7 @@ function(scpm_build_cmake)
         message("[SCPM] begin install ${directory} Release")
         execute_process(
                 COMMAND ${CMAKE_COMMAND} --build . --target install --config Release
-                WORKING_DIRECTORY "${directory}/build"
+                WORKING_DIRECTORY "${directory}/scpm_build_dir"
                 RESULT_VARIABLE scpm_build_cmake_result
         )
         if (NOT scpm_build_cmake_result EQUAL "0")

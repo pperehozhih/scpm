@@ -1,0 +1,229 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(nblood)
+
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 11)
+
+# FLAC
+find_path(SDL2_INCLUDE_DIR SDL2/SDL.h)
+set(SDL2_INCLUDE_DIR "${SDL2_INCLUDE_DIR}/SDL2")
+find_path(VORBIS_INCLUDE_DIR vorbis/codec.h)
+find_library(SDL2_LIBRARY NAMES SDL2d)
+find_library(SDL_MIXER_LIBRARY NAMES SDL_mixer)
+find_library(FLAC_LIBRARY NAMES FLAC)
+find_library(PNG_LIBRARY NAMES png)
+find_library(OGG_LIBRARY NAMES ogg)
+find_library(VORBIS_LIBRARY NAMES vorbis)
+find_library(VORBISENC_LIBRARY NAMES vorbisenc)
+find_library(VORBISFILE_LIBRARY NAMES vorbisfile)
+find_library(VPX_LIBRARY NAMES vpx)
+
+set(SRC_BUILD_FILE
+    source/build/src/2d.cpp
+    source/build/src/a-c.cpp
+    source/build/src/animvpx.cpp
+    source/build/src/baselayer.cpp
+    source/build/src/cache1d.cpp
+    source/build/src/compat.cpp
+    source/build/src/common.cpp
+    source/build/src/crc32.cpp
+    source/build/src/defs.cpp
+    source/build/src/clip.cpp
+    source/build/src/colmatch.cpp
+    source/build/src/engine.cpp
+    source/build/src/hash.cpp
+    source/build/src/glbuild.cpp
+    source/build/src/polymost.cpp
+    source/build/src/mdsprite.cpp
+    source/build/src/texcache.cpp
+    source/build/src/dxtfilter.cpp
+    source/build/src/hightile.cpp
+    source/build/src/textfont.cpp
+    source/build/src/smalltextfont.cpp
+    source/build/src/kplib.cpp
+    source/build/src/mmulti_null.cpp
+    source/build/src/lz4.c
+    source/build/src/osd.cpp
+    source/build/src/md4.cpp
+    source/build/src/pragmas.cpp
+    source/build/src/scriptfile.cpp
+    source/build/src/mutex.cpp
+    source/build/src/xxhash.c
+    source/build/src/voxmodel.cpp
+    source/build/src/rev.cpp
+    source/build/src/sdlayer.cpp
+    source/build/src/screenshot.cpp
+    source/build/src/tiles.cpp
+    source/build/src/mhk.cpp
+    source/build/src/palette.cpp
+    source/build/src/pngwrite.cpp
+    source/build/src/tilepacker.cpp
+    source/build/src/glsurface.cpp
+    source/build/src/softsurface.cpp
+    source/build/src/fix16_str.c
+    source/build/src/fix16.c
+    source/build/src/klzw.cpp
+    source/build/src/osxbits.mm
+    source/build/src/polymer.cpp
+    source/build/src/miniz.c
+    source/build/src/miniz_tdef.c
+    source/build/src/miniz_tinfl.c
+)
+
+set(SRC_MACT_FILE
+    source/mact/src/file_lib.cpp
+    source/mact/src/control.cpp
+    source/mact/src/keyboard.cpp
+    source/mact/src/joystick.cpp
+    source/mact/src/scriplib.cpp
+    source/mact/src/animlib.cpp
+)
+
+set(SRC_GAME_FILE
+    source/duke3d/src/game.cpp
+    source/duke3d/src/actors.cpp
+    source/duke3d/src/anim.cpp
+    source/duke3d/src/common.cpp
+    source/duke3d/src/config.cpp
+    source/duke3d/src/demo.cpp
+    source/duke3d/src/gamedef.cpp
+    source/duke3d/src/gameexec.cpp
+    source/duke3d/src/gamevars.cpp
+    source/duke3d/src/global.cpp
+    source/duke3d/src/input.cpp
+    source/duke3d/src/menus.cpp
+    source/duke3d/src/namesdyn.cpp
+    source/duke3d/src/net.cpp
+    source/duke3d/src/player.cpp
+    source/duke3d/src/premap.cpp
+    source/duke3d/src/savegame.cpp
+    source/duke3d/src/sector.cpp
+    source/duke3d/src/rts.cpp
+    source/duke3d/src/osdfuncs.cpp
+    source/duke3d/src/osdcmds.cpp
+    source/duke3d/src/grpscan.cpp
+    source/duke3d/src/sounds.cpp
+    source/duke3d/src/soundsdyn.cpp
+    source/duke3d/src/sdlmusic.cpp
+    source/duke3d/src/cmdline.cpp
+    source/duke3d/src/screens.cpp
+    source/duke3d/src/screentext.cpp
+    source/duke3d/src/cheats.cpp
+    source/duke3d/src/sbar.cpp
+)
+
+set(SRC_AUDIOLIB_FILE
+    source/audiolib/src/drivers.cpp
+    source/audiolib/src/fx_man.cpp
+    source/audiolib/src/multivoc.cpp
+    source/audiolib/src/mix.cpp
+    source/audiolib/src/mixst.cpp
+    source/audiolib/src/pitch.cpp
+    source/audiolib/src/formats.cpp
+    source/audiolib/src/vorbis.cpp
+    source/audiolib/src/flac.cpp
+    source/audiolib/src/xa.cpp
+    source/audiolib/src/xmp.cpp
+    source/audiolib/src/driver_nosound.cpp
+    source/audiolib/src/driver_sdl.cpp
+)
+
+set(SRC_ENET_FILE
+    source/enet/src/callbacks.c
+    source/enet/src/host.c
+    source/enet/src/list.c
+    source/enet/src/packet.c
+    source/enet/src/peer.c
+    source/enet/src/protocol.c
+    source/enet/src/compress.c
+    source/enet/src/unix.c
+)
+
+set(SRC_GLAD_FILE
+    source/glad/src/glad.c
+    # source/glad/src/glad_wgl.c
+)
+
+# libyuv
+# find_path(LIBYUV_INCLUDE_DIR libyuv)
+# find_library(LIBYUV_LIBRARY NAMES yuv)
+# find_package_handle_standard_args(LIBYUV DEFAULT_MSG LIBYUV_LIBRARY LIBYUV_INCLUDE_DIR)
+
+include_directories(.
+    source/build/include
+    source/glad/include
+    source/mact/include
+    source/audiolib/include
+    source/enet/include
+    ${SDL2_INCLUDE_DIR}
+    ${VORBIS_INCLUDE_DIR}
+)
+
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++11-narrowing -Wno-constant-conversion -Wno-tautological-constant-out-of-range-compare -Wno-ignored-attributes")
+
+add_executable(${PROJECT_NAME}
+    ${SRC_BUILD_FILE}
+    ${SRC_MACT_FILE}
+    ${SRC_GAME_FILE}
+    ${SRC_AUDIOLIB_FILE}
+    ${SRC_ENET_FILE}
+    ${SRC_GLAD_FILE}
+)
+message("${SDL2_LIBRARIES} ${SDL2_LIBRARY} ${SDL_MIXER_LIBRARY} ${FLAC_LIBRARY} ${PNG_LIBRARY} ${OGG_LIBRARY} ${OGG_LIBRARY} ${VORBISENC_LIBRARY} ${VORBISFILE_LIBRARY}")
+target_link_libraries(${PROJECT_NAME}
+    ${SDL2_LIBRARIES}
+    ${SDL2_LIBRARY}
+    ${SDL_MIXER_LIBRARY}
+    ${FLAC_LIBRARY}
+    ${PNG_LIBRARY}
+    ${OGG_LIBRARY}
+    ${VORBIS_LIBRARY}
+    ${VORBISENC_LIBRARY}
+    ${VORBISFILE_LIBRARY}
+    ${VPX_LIBRARY}
+    iconv
+    "-framework  CoreFoundation"
+    "-framework  AudioToolbox"
+    "-framework  CoreAudio"
+    "-framework  CoreVideo"
+    "-framework  ForceFeedback"
+    "-framework  AppKit"
+    "-framework  OpenGL"
+    "-framework  IOKit"
+    "-framework  Cocoa"
+    "-framework  Carbon"
+    "-ObjC"
+)
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    HAVE_VORBIS
+    HAVE_JWZGLES
+    RENDERTYPESDL=1
+    MIXERTYPESDL=1
+    USE_OPENGL
+    NETCODE_DISABLE
+    USE_LIBVPX
+    POLYMER
+    _REENTRANT
+    NOASM
+)
+
+INSTALL(FILES
+    vpx/vp8.h
+    vpx/vp8cx.h
+    vpx/vp8dx.h
+    vpx/vpx_codec.h
+    vpx/vpx_decoder.h
+    vpx/vpx_encoder.h
+    vpx/vpx_frame_buffer.h
+    vpx/vpx_image.h
+    vpx/vpx_integer.h
+    DESTINATION include/vpx
+)
+
+install(TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

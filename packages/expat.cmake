@@ -18,6 +18,5 @@ set(scpm_expat_lib_debug
     CACHE STRING ""
 )
 set(scpm_expat_depends
-    expatd
     CACHE STRING ""
 )

@@ -1,0 +1,108 @@
+cmake_minimum_required(VERSION 3.0.2)
+project(mpg123)
+set(CMAKE_CXX_STANDARD 17)
+include(CheckIncludeFiles)
+include(CheckFunctionExists)
+include(CheckTypeSize)
+check_include_files (arpa/inet.h HAVE_ARPA_INET_H)
+check_include_files (dirent.h HAVE_DIRENT_H)
+check_include_files (dlfcn.h HAVE_DLFCN_H)
+check_include_files (inttypes.h HAVE_INTTYPES_H)
+check_include_files (limits.h HAVE_LIMITS_H)
+check_include_files (locale.h HAVE_LOCALE_H)
+check_include_files (memory.h HAVE_MEMORY_H)
+check_include_files (netdb.h HAVE_NETDB_H)
+check_include_files (netinet/in.h HAVE_NETINET_IN_H)
+check_include_files (sched.h HAVE_SCHED_H)
+check_include_files (signal.h HAVE_SIGNAL_H)
+check_include_files (stdint.h HAVE_STDINT_H)
+check_include_files (stdio.h HAVE_STDIO_H)
+check_include_files (stdlib.h HAVE_STDLIB_H)
+check_include_files (strings.h HAVE_STRINGS_H)
+check_include_files (string.h HAVE_STRING_H)
+check_include_files (sys/ioctl.h HAVE_SYS_IOCTL_H)
+check_include_files (sys/param.h HAVE_SYS_PARAM_H)
+check_include_files (sys/resource.h HAVE_SYS_RESOURCE_H)
+check_include_files (sys/select.h HAVE_SYS_SELECT_H)
+check_include_files (sys/socket.h HAVE_SYS_SOCKET_H)
+check_include_files (sys/stat.h HAVE_SYS_STAT_H)
+check_include_files (sys/time.h HAVE_SYS_TIME_H)
+check_include_files (sys/types.h HAVE_SYS_TYPES_H)
+check_include_files (sys/wait.h HAVE_SYS_WAIT_H)
+check_include_files (unistd.h HAVE_UNISTD_H)
+check_include_files (windows.h HAVE_WINDOWS_H)
+check_include_files (ws2tcpip.h HAVE_WS2TCPIP_H)
+
+
+check_function_exists(atoll HAVE_ATOLL)
+check_function_exists(dlclose HAVE_DLCLOSE)
+check_function_exists(dlopen HAVE_DLOPEN)
+check_function_exists(dlsym HAVE_DLSYM)
+check_function_exists(getaddrinfo HAVE_GETADDRINFO)
+check_function_exists(getuid HAVE_GETUID)
+check_function_exists(strerror HAVE_STRERROR)
+
+
+check_type_size(int32_t SIZEOF_INT32)
+check_type_size(long SIZEOF_LONG)
+check_type_size(off_t SIZEOF_OFF_T)
+check_type_size(size_t SIZEOF_SIZE_T)
+check_type_size(ssize_t SIZEOF_SSIZE_T)
+
+if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
+	set(LFS_ALIAS_BITS 32)
+else()
+	set(LFS_ALIAS_BITS 64)
+endif()
+
+configure_file(config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+configure_file(mpg123.h.in ${CMAKE_CURRENT_BINARY_DIR}/mpg123.h)
+include_directories(
+	${CMAKE_CURRENT_BINARY_DIR}
+	src
+	src/compat
+	src/libmpg123
+)
+set(SOURCE
+	src/libmpg123/parse.c
+    src/libmpg123/frame.c
+    src/libmpg123/format.c
+    src/libmpg123/dct64.c
+    src/libmpg123/equalizer.c
+    src/libmpg123/id3.c
+    src/libmpg123/optimize.c
+    src/libmpg123/readers.c
+    src/libmpg123/tabinit.c
+    src/libmpg123/libmpg123.c
+    src/libmpg123/index.c
+    src/compat/compat_str.c
+    src/compat/compat.c
+	src/libmpg123/stringbuf.c
+    src/libmpg123/icy.c
+    src/libmpg123/icy2utf8.c
+    src/libmpg123/ntom.c
+    src/libmpg123/synth.c
+    src/libmpg123/synth_8bit.c
+    src/libmpg123/layer1.c
+    src/libmpg123/layer2.c
+    src/libmpg123/layer3.c
+    src/libmpg123/synth_s32.c
+    src/libmpg123/synth_real.c
+    src/libmpg123/feature.c
+)
+
+add_library(${PROJECT_NAME} ${SOURCE})
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE -DOPT_GENERIC -DREAL_IS_FLOAT)
+
+INSTALL(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/config.h
+    ${CMAKE_CURRENT_BINARY_DIR}/mpg123.h
+    DESTINATION include/mpg123
+)
+
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)

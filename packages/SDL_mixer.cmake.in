@@ -1,0 +1,87 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(SDL_mixer)
+include(FindPackageHandleStandardArgs)
+
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+find_path(SDL2_INCLUDE_DIR SDL2/SDL.h)
+set(SDL2_INCLUDE_DIR "${SDL2_INCLUDE_DIR}/SDL2")
+find_library(SDL2_LIBRARY NAMES SDL2)
+include_directories(${SDL2_INCLUDE_DIR})
+# FLAC
+find_path(FLAC_INCLUDE_DIR FLAC/all.h)
+find_path(FLAC_INCLUDE_DIR FLAC/stream_decoder.h)
+find_library(FLAC_LIBRARY NAMES FLAC)
+find_package_handle_standard_args(FLAC DEFAULT_MSG FLAC_LIBRARY FLAC_INCLUDE_DIR)
+# Vorbis
+find_path(OGG_INCLUDE_DIR ogg/ogg.h)
+find_path(VORBIS_INCLUDE_DIR vorbis/vorbisfile.h)
+find_library(OGG_LIBRARY NAMES ogg)
+find_library(VORBIS_LIBRARY NAMES vorbis)
+set(VORBIS_LIBRARIES ${VORBIS_LIBRARY} ${OGG_LIBRARY})
+find_package_handle_standard_args(VORBIS DEFAULT_MSG VORBIS_LIBRARIES VORBIS_INCLUDE_DIR OGG_INCLUDE_DIR)
+set(VORBIS_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${VORBIS_INCLUDE_DIR})
+# mpg123
+find_path(MPG123_INCLUDE_DIR mpg123.h HINTS mpg123)
+find_library(MPG123_LIBRARY NAMES mpg123)
+find_package_handle_standard_args(MPG123 DEFAULT_MSG MPG123_LIBRARY MPG123_INCLUDE_DIR)
+
+if (FLAC_FOUND)
+  include_directories(${FLAC_INCLUDE_DIR})
+endif()
+if (VORBIS_FOUND)
+  include_directories(${VORBIS_INCLUDE_DIRS})
+endif()
+if (MPG123_FOUND)
+  include_directories(${MPG123_INCLUDE_DIR})
+endif()
+
+set(SRC_FILE
+effect_position.c
+effect_stereoreverse.c
+effects_internal.c
+load_aiff.c
+load_voc.c
+mixer.c
+music.c
+music_cmd.c
+music_flac.c
+music_fluidsynth.c
+music_mad.c
+music_mikmod.c
+music_modplug.c
+music_mpg123.c
+music_nativemidi.c
+music_ogg.c
+music_smpeg.c
+music_timidity.c
+music_wav.c
+)
+
+add_library(${PROJECT_NAME} ${SRC_FILE})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY})
+
+if (FLAC_FOUND)
+  target_link_libraries(${PROJECT_NAME} ${FLAC_LIBRARIES})
+  target_compile_definitions(${PROJECT_NAME} PRIVATE -DMUSIC_FLAC)
+endif()
+if (VORBIS_FOUND)
+  target_link_libraries(${PROJECT_NAME} ${VORBIS_LIBRARIES})
+  target_compile_definitions(${PROJECT_NAME} PRIVATE -DMUSIC_OGG)
+endif()
+if (MPG123_FOUND)
+  target_link_libraries(${PROJECT_NAME} ${MPG123_LIBRARIES})
+  target_compile_definitions(${PROJECT_NAME} PRIVATE -DMUSIC_MP3_MPG123)
+endif()
+
+INSTALL(FILES 
+  SDL_mixer.h
+  DESTINATION include/SDL2
+)
+
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)

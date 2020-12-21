@@ -10,6 +10,8 @@ int main() {
    sf::RenderWindow window(sf::VideoMode(640, 480), "ImGui + SFML = <3");
    window.setFramerateLimit(60);
    ImGui::SFML::Init(window);
+   ImGuiIO& io = ImGui::GetIO();
+   io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
    
    sf::CircleShape shape(100.f);
    shape.setFillColor(sf::Color::Green);
@@ -27,7 +29,7 @@ int main() {
       
       ImGui::SFML::Update(window, deltaClock.restart());
       
-      ImGui::ShowTestWindow();
+      ImGui::ShowDemoWindow();
       
       ImGui::Begin("Hello, world!");
       ImGui::Button("Look at this pretty button");

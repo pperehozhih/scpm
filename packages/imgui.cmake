@@ -1,5 +1,5 @@
 if (NOT scpm_imgui_version)
-	set(scpm_imgui_version "1.70" CACHE STRING "")
+	set(scpm_imgui_version "1.79" CACHE STRING "")
 endif()
 set(scpm_imgui_repo "https://github.com/ocornut/imgui")
 

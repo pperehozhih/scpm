@@ -72,6 +72,15 @@ function(scpm_build_configure)
     list(REMOVE_AT ARGN 0)
     set (buildargs ${ARGN})
     message("[SCPM] begin build ${directory} with configure")
+    include(ProcessorCount)
+    ProcessorCount(scpm_cores_count)
+    set(scpm_cores_count ${scpm_cores_count} CACHE STRING "")
+    if (scpm_platform_windows)
+        scpm_install(mingw)
+    else()
+        set(scpm_make_exec "make")
+        set(scpm_sh_exec "sh")
+    endif()
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E make_directory "${directory}/scpm_build_dir"
         WORKING_DIRECTORY "${directory}"
@@ -82,7 +91,7 @@ function(scpm_build_configure)
         message(FATAL_ERROR "[SCPM] cannot found sh")
     endif()
     execute_process(
-        COMMAND ${SH_PROGRAM} ../configure ${buildargs}
+        COMMAND ${scpm_sh_exec} ../configure ${buildargs}
         WORKING_DIRECTORY "${directory}/scpm_build_dir"
         RESULT_VARIABLE scpm_build_configure_configure_result
     )
@@ -90,7 +99,7 @@ function(scpm_build_configure)
         message(FATAL_ERROR "[SCPM] cannot configure repos ${directory}")
     endif()
     execute_process(
-        COMMAND make
+        COMMAND ${scpm_make_exec} -j ${scpm_cores_count}
         WORKING_DIRECTORY "${directory}/scpm_build_dir"
         RESULT_VARIABLE scpm_build_configure_make_result
     )
@@ -98,7 +107,7 @@ function(scpm_build_configure)
         message(FATAL_ERROR "[SCPM] cannot make repos ${directory}")
     endif()
     execute_process(
-        COMMAND make install
+        COMMAND ${scpm_make_exec} install
         WORKING_DIRECTORY "${directory}/scpm_build_dir"
         RESULT_VARIABLE scpm_build_configure_make_install_result
     )
@@ -106,6 +115,29 @@ function(scpm_build_configure)
         message(FATAL_ERROR "[SCPM] cannot make repos ${directory}")
     endif()
 endfunction(scpm_build_configure)
+
+function(scpm_build_make)
+    list(GET ARGN 0 directory)
+    list(REMOVE_AT ARGN 0)
+    set (buildargs ${ARGN})
+    set(buildargs ${buildargs} DESTDIR=${scpm_root_dir})
+    include(ProcessorCount)
+    ProcessorCount(scpm_cores_count)
+    set(scpm_cores_count ${scpm_cores_count} CACHE STRING "")
+    if (scpm_platform_windows)
+        scpm_install(mingw)
+    else()
+        set(scpm_make_exec "make")
+    endif()
+    message("[SCPM] -> $ENV{PATH}")
+    message("[SCPM] ${scpm_make_exec} -j ${scpm_cores_count} ${buildargs}")
+    execute_process(COMMAND "${scpm_make_exec}" -j "${scpm_cores_count}" ${buildargs}
+        WORKING_DIRECTORY  "${directory}"
+    )
+    execute_process(COMMAND "${MAKE_EXEC}" install
+        WORKING_DIRECTORY  "${directory}"
+    )
+endfunction(scpm_build_make)
 
 function(scpm_build_cmake)
     list(GET ARGN 0 directory)

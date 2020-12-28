@@ -16,7 +16,7 @@ if (NOT EXISTS ${scpm_work_dir}/imgui-sfml_${scpm_imgui_sfml_version}.installed)
     file(DOWNLOAD "${scpm_server}/packages/${package_name}.cmake.in" "${scpm_work_dir}/imgui-sfml_${scpm_imgui_sfml_version}/internal/CMakeLists.txt")
     message("[SCPM] clone repos ${url}")
     execute_process(
-        COMMAND git clone -b master --depth 1 https://github.com/ocornut/imgui
+        COMMAND git clone -b docking --depth 1 https://github.com/ocornut/imgui
         WORKING_DIRECTORY ${scpm_work_dir}/imgui-sfml_${scpm_imgui_sfml_version}/internal/
         RESULT_VARIABLE scpm_clone_git_result
     )

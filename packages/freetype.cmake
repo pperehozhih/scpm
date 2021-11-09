@@ -9,6 +9,11 @@ if (NOT EXISTS ${scpm_work_dir}/freetype-${scpm_freetype_version}.installed)
     file(WRITE ${scpm_work_dir}/freetype-${scpm_freetype_version}.installed)
 endif()
 
+if(EMSCRIPTEN)
+    set(FREETYPE_INCLUDE_DIRS "${scpm_root_dir}/include/freetype2" CACHE STRING "")
+    set(FREETYPE_LIBRARY "${scpm_root_dir}/lib/freetype.a" CACHE STRING "")
+endif(EMSCRIPTEN)
+
 set(scpm_freetype_lib
     freetype
     CACHE STRING ""

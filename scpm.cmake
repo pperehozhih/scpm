@@ -180,7 +180,7 @@ function(scpm_build_cmake)
     message("[SCPM] begin generate ${directory} ${buildargs}")
     if (NOT scpm_platform_windows)
         execute_process(
-                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
+                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=Release -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
                 WORKING_DIRECTORY "${directory}/scpm_build_dir"
                 RESULT_VARIABLE scpm_build_cmake_result
         )
@@ -285,6 +285,8 @@ elseif(${CMAKE_SYSTEM_NAME} STREQUAL "watchOS")
     set(scpm_platform_ios 1)
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Android")
     set(scpm_platform_android 1)
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Emscripten")
+    set(scpm_platform_emscripten 1)
 # else()
 #     message(FATAL_ERROR "Unsupported operating system or environment")
 endif()

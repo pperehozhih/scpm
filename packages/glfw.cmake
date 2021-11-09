@@ -1,3 +1,8 @@
+
+if (EMSCRIPTEN)
+    return()
+endif(EMSCRIPTEN)
+
 if (NOT scpm_glfw_version)
     set(scpm_glfw_version "3.3.2" CACHE STRING "")
 endif()

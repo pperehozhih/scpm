@@ -1,6 +1,10 @@
 if (NOT scpm_freetype_version)
     set(scpm_freetype_version "2.10.0" CACHE STRING "")
 endif()
+scpm_install(png)
+scpm_install(bzip2)
+scpm_install(zlib)
+scpm_install(harfbuzz)
 set(scpm_freetype_repo "https://download.savannah.gnu.org/releases/freetype")
 
 if (NOT EXISTS ${scpm_work_dir}/freetype-${scpm_freetype_version}.installed)
@@ -16,13 +20,21 @@ endif(EMSCRIPTEN)
 
 set(scpm_freetype_lib
     freetype
+    png
+    bzip2
+    harfbuzz
     CACHE STRING ""
 )
 set(scpm_freetype_lib_debug
     freetyped
+    pngd
+    bzip2d
+    harfbuzzd
     CACHE STRING ""
 )
 set(scpm_freetype_depends
-    ""
+    png
+    bzip2
+    harfbuzz
     CACHE STRING ""
 )

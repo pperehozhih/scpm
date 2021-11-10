@@ -10,6 +10,9 @@ endif()
 if (NOT scpm_root_dir)
     set(scpm_root_dir ${CMAKE_CURRENT_BINARY_DIR}/root)
 endif()
+if (NOT scmp_build_type)
+    set(scmp_build_type Release)
+endif()
 
 function(scpm_download_and_extract_archive url filename)
     message("[SCPM] download archive ${url}/${filename} to ${scpm_work_dir}/${filename}")
@@ -179,17 +182,25 @@ function(scpm_build_cmake)
     endif()
     message("[SCPM] begin generate ${directory} ${buildargs}")
     if (NOT scpm_platform_windows)
-        execute_process(
-                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=Release -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
-                WORKING_DIRECTORY "${directory}/scpm_build_dir"
-                RESULT_VARIABLE scpm_build_cmake_result
-        )
+        if (scpm_platform_macos)
+            execute_process(
+                    COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -T buildsystem=1 -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=${scmp_build_type} -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
+                    WORKING_DIRECTORY "${directory}/scpm_build_dir"
+                    RESULT_VARIABLE scpm_build_cmake_result
+            )
+        else()
+            execute_process(
+                    COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=${scmp_build_type} -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
+                    WORKING_DIRECTORY "${directory}/scpm_build_dir"
+                    RESULT_VARIABLE scpm_build_cmake_result
+            )
+        endif()
         if (NOT scpm_build_cmake_result EQUAL "0")
             message(FATAL_ERROR "[SCPM] cannot generate ${directory}")
         endif()
         message("[SCPM] begin build and install ${directory}")
         execute_process(
-                COMMAND ${CMAKE_COMMAND} --build . --target install --config Release
+                COMMAND ${CMAKE_COMMAND} --build . --target install --config ${scmp_build_type}
                 WORKING_DIRECTORY "${directory}/scpm_build_dir"
                 RESULT_VARIABLE scpm_build_cmake_result
         )
@@ -290,3 +301,5 @@ elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Emscripten")
 # else()
 #     message(FATAL_ERROR "Unsupported operating system or environment")
 endif()
+
+message("Build for platform ${CMAKE_SYSTEM_NAME}")

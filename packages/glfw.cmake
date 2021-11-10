@@ -33,6 +33,7 @@ if(scpm_platform_macos)
         "-framework  IOKit"
         "-framework  Cocoa"
         "-framework  Carbon"
+        "-framework  CoreVideo"
         "-ObjC"
     )
 elseif(scpm_platform_ios)

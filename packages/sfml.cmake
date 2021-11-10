@@ -1,12 +1,10 @@
 if (NOT scpm_sfml_version)
     set(scpm_sfml_version "2.5.1" CACHE STRING "")
 endif()
-if (scpm_platform_android OR scpm_platform_windows)
-    scpm_install(freetype)
-    scpm_install(vorbis)
-    scpm_install(flac)
-    scpm_install(openal_soft)
-endif()
+scpm_install(freetype)
+scpm_install(vorbis)
+scpm_install(flac)
+scpm_install(openal_soft)
 set(scpm_sfml_repo "https://github.com/SFML/SFML")
 
 if (NOT EXISTS ${scpm_work_dir}/SFML-${scpm_sfml_version}.installed)
@@ -81,6 +79,14 @@ elseif(scpm_platform_windows)
         openal_soft
         CACHE STRING ""
     )
+elseif(scpm_platform_macos)
+    set(scpm_sfml_depends
+        freetype
+        vorbis
+        flac
+        openal_soft
+        CACHE STRING ""
+    )
 else()
     set(scpm_sfml_depends
         ""
@@ -96,6 +102,10 @@ if(scpm_platform_macos)
         "-framework  IOKit"
         "-framework  Cocoa"
         "-framework  Carbon"
+        "freetype"
+        "vorbis"
+        "flac"
+        "openal_soft"
         "-ObjC"
     )
 elseif(scpm_platform_ios)

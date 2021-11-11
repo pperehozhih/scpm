@@ -8,15 +8,21 @@ if (NOT EXISTS ${scpm_work_dir}/zlib-${scpm_zlib_version}.installed)
     scpm_build_cmake("${scpm_work_dir}/zlib-${scpm_zlib_version}")
     file(WRITE ${scpm_work_dir}/zlib-${scpm_zlib_version}.installed)
 endif()
-
-set(scpm_zlib_lib
-    z
-    CACHE STRING ""
-)
-set(scpm_zlib_lib_debug
-    zd
-    CACHE STRING ""
-)
+if(scpm_platform_windows)
+    set(scpm_zlib_lib
+        zlib
+        CACHE STRING ""
+    )
+    set(scpm_zlib_lib_debug
+        zlibd
+        CACHE STRING ""
+    )
+else()
+    set(scpm_zlib_lib
+        z
+        CACHE STRING ""
+    )
+endif()
 set(scpm_zlib_depends
     CACHE STRING ""
 )

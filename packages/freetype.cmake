@@ -20,16 +20,10 @@ endif(EMSCRIPTEN)
 
 set(scpm_freetype_lib
     freetype
-    png
-    bzip2
-    harfbuzz
     CACHE STRING ""
 )
 set(scpm_freetype_lib_debug
     freetyped
-    pngd
-    bzip2d
-    harfbuzzd
     CACHE STRING ""
 )
 set(scpm_freetype_depends

@@ -21,7 +21,7 @@ if (NOT EXISTS ${scpm_work_dir}/imgui-glfw_${scpm_imgui_glfw_version}.installed)
 
     message("[SCPM] clone repos ${scpm_work_dir}/imgui-glfw_${scpm_imgui_glfw_version}/")
     execute_process(
-        COMMAND git clone -b docking --depth 1 https://github.com/ocornut/imgui
+        COMMAND git clone -b v1.85 --depth 1 https://github.com/ocornut/imgui
         WORKING_DIRECTORY ${scpm_work_dir}/imgui-glfw_${scpm_imgui_glfw_version}
         RESULT_VARIABLE scpm_clone_git_result
     )

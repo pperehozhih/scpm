@@ -1,6 +1,9 @@
 if (NOT scpm_png_version)
     set(scpm_png_version "1.6.35" CACHE STRING "")
 endif()
+if(scpm_platform_windows)
+    scpm_install(zlib)
+endif()
 set(scpm_png_repo "https://github.com/glennrp/libpng")
 
 if (NOT EXISTS ${scpm_work_dir}/png-${scpm_png_version}.installed)
@@ -11,13 +14,11 @@ endif()
 
 if(scpm_platform_windows)
     set(scpm_png_lib
-        png
-        zlib
+        libpng16_static
         CACHE STRING ""
     )
     set(scpm_png_lib_debug
-        pngd
-        zlibd
+        libpng16_staticd
         CACHE STRING ""
     )
     set(scpm_png_depends

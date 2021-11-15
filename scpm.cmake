@@ -263,6 +263,19 @@ function(scpm_create_target)
     if (${scpm_create_target_TYPE} STREQUAL "GUI")
         if(MSVC)
             add_executable(${scpm_create_target_TARGET} WIN32 ${scpm_create_target_FILES})
+        elseif(scpm_platform_macos)
+            add_executable(${scpm_create_target_TARGET} MACOSX_BUNDLE ${scpm_create_target_FILES})
+            file(GLOB scpm_root_dylibs
+                "${scpm_root_dir}/lib/*.dylib"
+            )
+            file(COPY ${scpm_root_dylibs} DESTINATION "${scpm_root_dir}/bin/Release/${scpm_create_target_TARGET}.app/Contents/Frameworks")
+            file(GLOB scpm_root_dylibs
+                "${scpm_root_dir}/bin/Release/${scpm_create_target_TARGET}.app/Release/Contents/Frameworks/*.dylib"
+            )
+            install (CODE "
+                include(BundleUtilities)
+                fixup_bundle(\"${scpm_root_dir}/bin/Release/${scpm_create_target_TARGET}.app\" \"${scpm_root_dylibs}\" \"${scpm_root_dir}/lib\")
+            " OPTIONAL)
         else()
             add_executable(${scpm_create_target_TARGET} ${scpm_create_target_FILES})
         endif()
@@ -275,6 +288,23 @@ function(scpm_create_target)
     else()
         message(FATAL_ERROR "Unknown target type ${scpm_create_target_TARGET}")
     endif()
+    set_target_properties(${scpm_create_target_TARGET}
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${scpm_root_dir}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${scpm_root_dir}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${scpm_root_dir}/bin"
+    )
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${scpm_root_dir}/bin" )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${scpm_root_dir}/lib" )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${scpm_root_dir}/lib" )
+    foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+        string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+        set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/bin" )
+        set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/lib" )
+        set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/lib" )
+    endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endfunction(scpm_create_target)
 
 function(scpm_link_target)
@@ -292,16 +322,6 @@ function(scpm_link_target)
         set(dependencies ${dependencies} ${lib})
         list(LENGTH childrens length)
     endwhile()
-    # foreach(lib ${scpm_link_target_LIBS})
-    #     set(dependencies ${dependencies} ${lib})
-    #     message("0 ${lib}")
-    #     scpm_link_target_get_all_dependecies__(${dependencies} ${lib})
-    #     message("3 ${scpm_${lib}_depends}")
-    #     foreach(depends ${scpm_${lib}_depends})
-    #         set(dependencies ${dependencies} ${depends})
-    #     endforeach(depends ${scpm_${lib}_depends})
-        
-    # endforeach(lib ${scpm_link_target_LIBS})
     list(REMOVE_DUPLICATES dependencies)
     set(linklibs "")
     foreach(lib ${dependencies})

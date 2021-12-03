@@ -5,6 +5,7 @@ scpm_install(png)
 scpm_install(bzip2)
 scpm_install(zlib)
 scpm_install(harfbuzz)
+scpm_install(brotli)
 set(scpm_freetype_repo "https://github.com/freetype/freetype.git")
 
 if (NOT EXISTS ${scpm_work_dir}/freetype-${scpm_freetype_version}.installed)
@@ -43,5 +44,6 @@ set(scpm_freetype_depends
     png
     bzip2
     harfbuzz
+    brotli
     CACHE STRING ""
 )

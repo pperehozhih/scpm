@@ -19,9 +19,13 @@ if(scpm_platform_windows)
     )
 else()
     set(scpm_brotli_lib
+        brotlicommon-static
+        brotlidec-static
+        brotlienc-static
         CACHE STRING ""
     )
 endif()
 set(scpm_brotli_depends
+    ""
     CACHE STRING ""
 )

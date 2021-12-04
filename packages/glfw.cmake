@@ -4,7 +4,7 @@ if (EMSCRIPTEN)
 endif(EMSCRIPTEN)
 
 if (NOT scpm_glfw_version)
-    set(scpm_glfw_version "3.3.2" CACHE STRING "")
+    set(scpm_glfw_version "3.3.5" CACHE STRING "")
 endif()
 set(scpm_glfw_repo "https://github.com/glfw/glfw")
 

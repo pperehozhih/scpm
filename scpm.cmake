@@ -268,9 +268,9 @@ function(scpm_create_target)
             file(GLOB scpm_root_dylibs
                 "${scpm_root_dir}/lib/*.dylib"
             )
-            file(COPY ${scpm_root_dylibs} DESTINATION "${scpm_root_dir}/bin/Release/${scpm_create_target_TARGET}.app/Contents/Frameworks")
+            file(COPY ${scpm_root_dylibs} DESTINATION "${scpm_root_dir}/bin/Release/${scpm_create_target_TARGET}.app/Contents/MacOS")
             file(GLOB scpm_root_dylibs
-                "${scpm_root_dir}/bin/Release/${scpm_create_target_TARGET}.app/Release/Contents/Frameworks/*.dylib"
+                "${scpm_root_dir}/bin/Release/${scpm_create_target_TARGET}.app/Release/Contents/MacOS/*.dylib"
             )
             install (CODE "
                 include(BundleUtilities)
@@ -305,6 +305,28 @@ function(scpm_create_target)
         set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/lib" )
     endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
     SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+
+    set(last_dir "")
+    set(files "")
+
+    foreach(file ${scpm_create_target_sources})
+        get_filename_component(dir "${file}" PATH)
+        if(NOT "${dir}" STREQUAL "${last_dir}")
+            if(files)
+                source_group("${last_dir}" FILES ${files})
+            endif()
+            set(files "")
+        endif()
+        set(files ${files} ${file})
+        set(last_dir "${dir}")
+    endforeach()
+
+    if(files)
+        source_group("${last_dir}" FILES ${files})
+    endif()
+
+
 endfunction(scpm_create_target)
 
 function(scpm_link_target)

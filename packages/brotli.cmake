@@ -10,11 +10,15 @@ if (NOT EXISTS ${scpm_work_dir}/brotli-${scpm_brotli_version}.installed)
 endif()
 if(scpm_platform_windows)
     set(scpm_brotli_lib
-        brotli
+        brotlicommon-static
+        brotlidec-static
+        brotlienc-static
         CACHE STRING ""
     )
     set(scpm_brotli_lib_debug
-        brotlid
+        brotlicommon-staticd
+        brotlidec-staticd
+        brotlienc-staticd
         CACHE STRING ""
     )
 else()

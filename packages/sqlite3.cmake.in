@@ -28,5 +28,5 @@ else()
   install(TARGETS sqlite RUNTIME DESTINATION bin)
 endif()
 
-install(FILES src/sqlite3.h src/sqlite3ext.h DESTINATION include)
+install(FILES sqlite3.h sqlite3ext.h DESTINATION include)
 install(TARGETS sqlite3 LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)

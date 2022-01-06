@@ -9,12 +9,15 @@ scpm_install(stb)
 if (NOT scpm_imgui_glfw_version)
     set(scpm_imgui_glfw_version "master" CACHE STRING "")
 endif()
+if (NOT scpm_imgui_glfw_imgui_version "docker" CACHE STRING "")#v1.85
+    set()
+endif()
 set(scpm_imgui_glfw_repo "https://github.com/pperehozhih/imgui_glfw")
 
 if (NOT EXISTS ${scpm_work_dir}/imgui-glfw_${scpm_imgui_glfw_version}.installed)
     #scpm_clone_git("${scpm_imgui_glfw_repo}" "${scpm_imgui_glfw_version}")
     execute_process(
-        COMMAND git clone --depth 1 ${scpm_imgui_glfw_repo} imgui-glfw_${scpm_imgui_glfw_version} -b ${scpm_imgui_glfw_version}
+        COMMAND git clone -b ${scpm_imgui_glfw_version} --depth 1 ${scpm_imgui_glfw_repo} imgui-glfw_${scpm_imgui_glfw_version} 
         WORKING_DIRECTORY ${scpm_work_dir}
         RESULT_VARIABLE scpm_clone_git_result
     )

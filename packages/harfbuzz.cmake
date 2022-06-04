@@ -1,5 +1,5 @@
 if (NOT scpm_harfbuzz_version)
-    set(scpm_harfbuzz_version "3.1.1" CACHE STRING "")
+    set(scpm_harfbuzz_version "4.3.0" CACHE STRING "")
 endif()
 
 scpm_install(freetype_hb)

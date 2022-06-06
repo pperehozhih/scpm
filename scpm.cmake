@@ -183,11 +183,19 @@ function(scpm_build_cmake)
     message("[SCPM] begin generate ${directory} ${buildargs}")
     if (NOT scpm_platform_windows)
         if (scpm_platform_macos)
-            execute_process(
-                    COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -T buildsystem=1 -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=${scmp_build_type} -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
+            if(CMAKE_GENERATOR STREQUAL Xcode)
+                execute_process(
+                        COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -T buildsystem=1 -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=${scmp_build_type} -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
+                        WORKING_DIRECTORY "${directory}/scpm_build_dir"
+                        RESULT_VARIABLE scpm_build_cmake_result
+                )
+            else()
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=${scmp_build_type} -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
                     WORKING_DIRECTORY "${directory}/scpm_build_dir"
                     RESULT_VARIABLE scpm_build_cmake_result
-            )
+                )
+            endif()
         else()
             execute_process(
                     COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=${scmp_build_type} -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}

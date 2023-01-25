@@ -27,12 +27,19 @@ if(scpm_platform_windows)
         nfdd
         CACHE STRING ""
     )
+elseif(scpm_platform_macos)
+    set(scpm_nfd_lib
+        nfd
+        "-framework  UniformTypeIdentifiers"
+        CACHE STRING ""
+    )
 else()
     set(scpm_nfd_lib
         nfd
         CACHE STRING ""
     )
 endif()
+
 set(scpm_nfd_depends
     ""
     CACHE STRING ""

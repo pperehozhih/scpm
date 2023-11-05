@@ -1,5 +1,5 @@
 if (NOT scpm_python_version)
-    set(scpm_python_version "v3.10.11" CACHE STRING "")
+    set(scpm_python_version "v3.12.0" CACHE STRING "")
 endif()
 set(scpm_python_repo "https://github.com/python/cpython")
 

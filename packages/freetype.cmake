@@ -6,7 +6,7 @@ scpm_install(bzip2)
 if (scpm_platform_windows)
     scpm_install(zlib)
 endif()
-scpm_install(harfbuzz)
+#scpm_install(harfbuzz)
 scpm_install(brotli)
 set(scpm_freetype_repo "https://github.com/freetype/freetype.git")
 
@@ -48,7 +48,7 @@ set(scpm_freetype_lib_debug
 set(scpm_freetype_depends
     png
     bzip2
-    harfbuzz
+#    harfbuzz
     brotli
     CACHE STRING ""
 )

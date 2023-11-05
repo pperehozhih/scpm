@@ -2,7 +2,7 @@ if (NOT scpm_mingw_version)
 	set(scpm_mingw_version "0.6.3" CACHE STRING "")
 endif()
 if (NOT EXISTS "${scpm_work_dir}/root/mingw.${scpm_mingw_version}.installed")
-	file(DOWNLOAD "https://osdn.net/dl/mingw/mingw-get-${scpm_mingw_version}-mingw32-pre-20170905-1-bin.zip" "${scpm_work_dir}/root/mingw-${scpm_mingw_version}.zip")
+	file(DOWNLOAD "http://osdn.net/dl/mingw/mingw-get-${scpm_mingw_version}-mingw32-pre-20170905-1-bin.zip" "${scpm_work_dir}/root/mingw-${scpm_mingw_version}.zip")
 	execute_process(
 		COMMAND ${CMAKE_COMMAND} -E tar xzf ${scpm_work_dir}/root/mingw-${scpm_mingw_version}.zip
 		WORKING_DIRECTORY ${scpm_work_dir}/root
@@ -22,7 +22,6 @@ find_program (scpm_bash_exec NAMES "bash.exe" HINTS "${scpm_work_dir}/root/msys/
 find_program (scpm_make_exec NAMES "make.exe" HINTS "${scpm_work_dir}/root/msys/1.0/bin/")
 find_program (scpm_sh_exec NAMES "sh.exe" HINTS "${scpm_work_dir}/root/msys/1.0/bin/")
 find_program (scpm_perl_exec NAMES "perl.exe" HINTS "${scpm_work_dir}/root/msys/1.0/bin/")
-message ("----- ${scpm_perl_exec}")
 get_filename_component(MSVC_COMPILER_DIRECTORY ${CMAKE_C_COMPILER} DIRECTORY)
 file(TO_NATIVE_PATH ${MSVC_COMPILER_DIRECTORY} MSVC_COMPILER_DIRECTORY)
 set(ENV{PATH} "$ENV{PATH}${MSVC_COMPILER_DIRECTORY};")

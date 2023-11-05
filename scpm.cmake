@@ -94,7 +94,7 @@ function(scpm_build_configure)
         message(FATAL_ERROR "[SCPM] cannot found sh")
     endif()
     execute_process(
-        COMMAND ${scpm_sh_exec} ./configure ${buildargs}
+        COMMAND ${scpm_sh_exec} ../configure ${buildargs}
         WORKING_DIRECTORY "${directory}/scpm_build_dir"
         RESULT_VARIABLE scpm_build_configure_configure_result
     )

@@ -1,5 +1,5 @@
 if (NOT scpm_sqlite3_geo_version)
-	set(scpm_sqlite3_geo_version "3.45.2" CACHE STRING "")
+	set(scpm_sqlite3_geo_version "3.45.2b1" CACHE STRING "")
 endif()
 set(scpm_sqlite3_geo_repo "https://gitflic.ru/project/paul2la/sqlite3-with-geo-distance.git")
 

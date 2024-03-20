@@ -52,7 +52,7 @@ function(scpm_clone_git url branch)
     endif()
     message("[SCPM] clone repos ${url} ${branch}")
     execute_process(
-            COMMAND git clone -b ${branch} --depth 1 ${url}
+            COMMAND git clone -b ${branch} --depth 1 ${url} ${scpm_git_addition_param}
             WORKING_DIRECTORY ${scpm_work_dir}
             RESULT_VARIABLE scpm_clone_git_result
     )
@@ -369,6 +369,10 @@ function(scpm_link_target)
         endif(scpm_platform_windows)
     endforeach(lib ${dependencies})
 endfunction(scpm_link_target)
+
+function(scpm_set_proxy proxy)
+    set(scpm_git_addition_param "${scpm_git_addition_param} --config \"http.proxy=${proxy}\"")
+endfunction(scpm_set_proxy)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     set(scpm_platform_windows 1)

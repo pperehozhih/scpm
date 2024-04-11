@@ -185,7 +185,7 @@ function(scpm_build_cmake)
         if (scpm_platform_macos)
             if(CMAKE_GENERATOR STREQUAL Xcode)
                 execute_process(
-                        COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -T buildsystem=1 -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=${scmp_build_type} -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
+                        COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_BUILD_TYPE=${scmp_build_type} -DCMAKE_FIND_ROOT_PATH=${scpm_root_dir} ${buildargs}
                         WORKING_DIRECTORY "${directory}/scpm_build_dir"
                         RESULT_VARIABLE scpm_build_cmake_result
                 )

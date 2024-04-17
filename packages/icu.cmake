@@ -1,0 +1,11 @@
+if (NOT scpm_icu_version)
+        set(scpm_icu_version "master" CACHE STRING "")
+endif()
+set(scpm_icu_repo "https://github.com/viaduck/icu-cmake")
+
+if (NOT EXISTS ${scpm_work_dir}/icu-${scpm_icu_version}.installed)
+    scpm_clone_git("${scpm_icu_repo}" "${scpm_icu_version}")
+    scpm_clone_git_submodule_update("${scpm_work_dir}/icu-cmake")
+    scpm_build_cmake("${scpm_work_dir}/icu-cmake" "-DBUILD_ICU=ON" "-DICU_BUILD_VERSION=74.2" "-DICU_STATIC=ON")
+    file(WRITE ${scpm_work_dir}/icu-${scpm_icu_version}.installed)
+endif()

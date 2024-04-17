@@ -5,7 +5,7 @@ set(scpm_nfd_repo "https://github.com/btzy/nativefiledialog-extended")
 
 if (NOT EXISTS ${scpm_work_dir}/nfd-${scpm_nfd_version}.installed)
     if(EXISTS "${scpm_work_dir}/nfd-${scpm_nfd_version}")
-    file(REMOVE_RECURSE "${scpm_work_dir}/nfd-${scpm_nfd_version}")
+        file(REMOVE_RECURSE "${scpm_work_dir}/nfd-${scpm_nfd_version}")
     endif()
     execute_process(
         COMMAND git clone -b ${scpm_nfd_version} --depth 1 ${scpm_nfd_repo} nfd-${scpm_nfd_version}

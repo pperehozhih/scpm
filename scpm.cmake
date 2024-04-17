@@ -14,6 +14,8 @@ if (NOT scmp_build_type)
     set(scmp_build_type Release)
 endif()
 
+list(APPEND CMAKE_PREFIX_PATH "${scpm_root_dir}")
+
 function(scpm_download_and_extract_archive url filename)
     message("[SCPM] download archive ${url}/${filename} to ${scpm_work_dir}/${filename}")
     file(DOWNLOAD ${url}/${filename} ${scpm_work_dir}/${filename})

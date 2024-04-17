@@ -1,5 +1,5 @@
 if (NOT scpm_png_version)
-    set(scpm_png_version "1.6.35" CACHE STRING "")
+    set(scpm_png_version "1.6.43" CACHE STRING "")
 endif()
 # if(scpm_platform_windows)
     scpm_install(zlib)

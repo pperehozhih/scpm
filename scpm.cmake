@@ -297,23 +297,31 @@ function(scpm_create_target)
     else()
         message(FATAL_ERROR "Unknown target type ${scpm_create_target_TARGET}")
     endif()
+    install(TARGETS ${scpm_create_target_TARGET}
+        RUNTIME DESTINATION "${scpm_root_dir}/bin"
+        LIBRARY DESTINATION "${scpm_root_dir}/lib"
+    )
     set_target_properties(${scpm_create_target_TARGET}
         PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY "${scpm_root_dir}/lib"
         LIBRARY_OUTPUT_DIRECTORY "${scpm_root_dir}/lib"
         RUNTIME_OUTPUT_DIRECTORY "${scpm_root_dir}/bin"
     )
-    set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
-    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${scpm_root_dir}/bin" )
-    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${scpm_root_dir}/lib" )
-    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${scpm_root_dir}/lib" )
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} PARENT_SCOPE)
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${scpm_root_dir}/bin" PARENT_SCOPE )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${scpm_root_dir}/lib" PARENT_SCOPE )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${scpm_root_dir}/lib" PARENT_SCOPE )
+    # Изменение стандартных путей установки
+    set(CMAKE_INSTALL_BINDIR "${scpm_root_dir}/bin" PARENT_SCOPE)
+    set(CMAKE_INSTALL_LIBDIR "${scpm_root_dir}/lib" PARENT_SCOPE)
+    set(CMAKE_INSTALL_INCLUDEDIR "${scpm_root_dir}/include" PARENT_SCOPE)
     foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
         string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
-        set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/bin" )
-        set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/lib" )
-        set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/lib" )
+        set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/bin" PARENT_SCOPE )
+        set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/lib" PARENT_SCOPE )
+        set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${scpm_root_dir}/lib" PARENT_SCOPE )
     endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
-    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib" PARENT_SCOPE )
 
     set(last_dir "")
     set(files "")

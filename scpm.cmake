@@ -95,6 +95,31 @@ function(scpm_build_configure)
     if (NOT SH_PROGRAM)
         message(FATAL_ERROR "[SCPM] cannot found sh")
     endif()
+    if (scpm_platform_android)
+        if (NOT scpm_platform_target_platform)
+            set(scpm_platform_target_platform 21)
+        endif()
+        if(ANDROID_TOOLCHAIN_NAME MATCHES "^arm-linux-androideabi-")
+            set(scpm_platform_target "armv7a-linux-androideabi${scpm_platform_target_platform}")
+            set(scpm_platform_host "armv7")
+        elseif(ANDROID_TOOLCHAIN_NAME MATCHES "^aarch64-linux-android-")
+            set(scpm_platform_target "aarch64-linux-android${scpm_platform_target_platform}")
+            set(scpm_platform_host "aarch64")
+        elseif(ANDROID_TOOLCHAIN_NAME MATCHES "^x86_64-")
+            set(scpm_platform_target "x86_64-linux-android${scpm_platform_target_platform}")
+            set(scpm_platform_host "x86_64")
+        else()
+            set(scpm_platform_target "armv7a-linux-androideabi${scpm_platform_target_platform}")
+            set(scpm_platform_host "armv7")
+        endif()
+        set(buildargs ${buildargs}
+            "CC=${CMAKE_C_COMPILER}"
+            "CXX=${CMAKE_CXX_COMPILER}"
+            "CFLAGS=--sysroot=${CMAKE_SYSROOT} --target=${scpm_platform_target} ${CMAKE_C_FLAGS}"
+            "CXXFLAGS=--sysroot=${CMAKE_SYSROOT} --target=${scpm_platform_target} ${CMAKE_CXX_FLAGS}"
+            "RANLIB=${CMAKE_RANLIB}"
+            "--host=${scpm_platform_host}")
+    endif()
     execute_process(
         COMMAND ${scpm_sh_exec} ../configure ${buildargs}
         WORKING_DIRECTORY "${directory}/scpm_build_dir"

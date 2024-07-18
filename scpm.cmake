@@ -115,8 +115,8 @@ function(scpm_build_configure)
         set(buildargs ${buildargs}
             "CC=${CMAKE_C_COMPILER}"
             "CXX=${CMAKE_CXX_COMPILER}"
-            "CFLAGS=--sysroot=${CMAKE_SYSROOT} --target=${scpm_platform_target} ${CMAKE_C_FLAGS}"
-            "CXXFLAGS=--sysroot=${CMAKE_SYSROOT} --target=${scpm_platform_target} ${CMAKE_CXX_FLAGS}"
+            "CFLAGS=--sysroot=${CMAKE_SYSROOT} --target=${scpm_platform_target} ${CMAKE_C_FLAGS} -fPIC"
+            "CXXFLAGS=--sysroot=${CMAKE_SYSROOT} --target=${scpm_platform_target} ${CMAKE_CXX_FLAGS} -fPIC"
             "RANLIB=${CMAKE_RANLIB}"
             "--host=${scpm_platform_host}")
     endif()

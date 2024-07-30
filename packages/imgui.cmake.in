@@ -5,6 +5,7 @@ project(imgui)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Game section
+include_directories(.)
 aux_source_directory(. SRC_FILE)
 aux_source_directory(misc/freetype SRC_FREE_TYPE_FILE)
 file(GLOB HDR_FILE "./*.h*")

@@ -6,9 +6,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Game section
 aux_source_directory(. SRC_FILE)
+aux_source_directory(misc/freetype SRC_FREE_TYPE_FILE)
 file(GLOB HDR_FILE "./*.h*")
 
-add_library(${PROJECT_NAME} ${SRC_FILE} ${HDR_FILE})
+add_library(${PROJECT_NAME} ${SRC_FILE} ${SRC_FREE_TYPE_FILE} ${HDR_FILE})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 INSTALL(FILES 
@@ -18,6 +19,7 @@ INSTALL(FILES
   imstb_rectpack.h
   imstb_textedit.h
   imstb_truetype.h
+  misc/freetype/imgui_freetype.h
   DESTINATION include
 )
 

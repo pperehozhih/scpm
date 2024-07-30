@@ -1,5 +1,5 @@
 if (NOT scpm_zlib_version)
-    set(scpm_zlib_version "1.2.12" CACHE STRING "")
+    set(scpm_zlib_version "1.3.1" CACHE STRING "")
 endif()
 set(scpm_zlib_repo "https://github.com/madler/zlib")
 

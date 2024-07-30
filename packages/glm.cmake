@@ -1,5 +1,5 @@
 if (NOT scpm_glm_version)
-        set(scpm_glm_version "0.9.9.5" CACHE STRING "")
+        set(scpm_glm_version "1.0.1" CACHE STRING "")
 endif()
 set(scpm_glm_repo "https://github.com/g-truc/glm")
 

@@ -1,9 +1,9 @@
 if (NOT scpm_png_version)
     set(scpm_png_version "1.6.43" CACHE STRING "")
 endif()
-# if(scpm_platform_windows)
+if(scpm_platform_android)
     scpm_install(zlib)
-# endif()
+endif()
 set(scpm_png_repo "https://github.com/glennrp/libpng")
 
 if (NOT EXISTS ${scpm_work_dir}/png-${scpm_png_version}.installed)

@@ -6,7 +6,7 @@ set(scpm_imgui_repo "https://github.com/ocornut/imgui")
 if (NOT EXISTS ${scpm_work_dir}/imgui-${scpm_imgui_version}.installed)
     scpm_download_github_archive("${scpm_imgui_repo}" "v${scpm_imgui_version}")
     file(DOWNLOAD "${scpm_server}/packages/${package_name}.cmake.in" "${scpm_work_dir}/imgui-${scpm_imgui_version}/CMakeLists.txt")
-	scpm_build_cmake("${scpm_work_dir}/imgui-${scpm_imgui_version}")
+	scpm_build_cmake("${scpm_work_dir}/imgui-${scpm_imgui_version}" "-DCMAKE_CXX_FLAGS='-I${scpm_root_dir}/include -I${scpm_root_dir}/include/freetype2'")
 	file(WRITE ${scpm_work_dir}/imgui-${scpm_imgui_version}.installed "")
 endif()
 

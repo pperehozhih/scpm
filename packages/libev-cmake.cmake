@@ -5,6 +5,7 @@ set(scpm_libev_cmake_repo "https://github.com/mksdev/libev-cmake")
 
 if (NOT EXISTS ${scpm_work_dir}/libev-cmake-${scpm_libev_cmake_version}.installed)
     scpm_clone_git("${scpm_libev_cmake_repo}" "master")
+    scpm_clone_git_submodule_update("${scpm_work_dir}/libev-cmake")
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E rename "${scpm_work_dir}/libev-cmake" "${scpm_work_dir}/libev-cmake_${scpm_libev_cmake_version}"
     )

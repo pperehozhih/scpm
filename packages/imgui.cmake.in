@@ -8,9 +8,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include_directories(.)
 aux_source_directory(. SRC_FILE)
 aux_source_directory(misc/freetype SRC_FREE_TYPE_FILE)
+aux_source_directory(misc/cpp SRC_STD_FILE)
 file(GLOB HDR_FILE "./*.h*")
 
-add_library(${PROJECT_NAME} ${SRC_FILE} ${SRC_FREE_TYPE_FILE} ${HDR_FILE})
+add_library(${PROJECT_NAME} ${SRC_FILE} ${SRC_FREE_TYPE_FILE} ${SRC_STD_FILE} ${HDR_FILE})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 INSTALL(FILES 

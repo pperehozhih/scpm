@@ -21,6 +21,7 @@ INSTALL(FILES
   imstb_textedit.h
   imstb_truetype.h
   misc/freetype/imgui_freetype.h
+  misc/cpp/imgui_stdlib.h
   DESTINATION include
 )
 

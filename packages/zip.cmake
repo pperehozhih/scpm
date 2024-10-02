@@ -10,16 +10,16 @@ if (NOT EXISTS ${scpm_work_dir}/zip-${scpm_zip_version}.installed)
 endif()
 if(scpm_platform_windows)
     set(scpm_zip_lib
-        libzip
+        zip
         CACHE STRING ""
     )
     set(scpm_zip_lib_debug
-        libzip
+        zipd
         CACHE STRING ""
     )
 else()
     set(scpm_zip_lib
-        libzip
+        zip
         CACHE STRING ""
     )
 endif()

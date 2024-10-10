@@ -1,7 +1,7 @@
 if (NOT scpm_geographiclib_version)
     set(scpm_geographiclib_version "v2.4" CACHE STRING "")
 endif()
-set(scpm_geographiclib_repo "https://github.com/btzy/nativefiledialog-extended")
+set(scpm_geographiclib_repo "https://github.com/geographiclib/geographiclib")
 
 if (NOT EXISTS ${scpm_work_dir}/geographiclib-${scpm_geographiclib_version}.installed)
     if(EXISTS "${scpm_work_dir}/geographiclib-${scpm_geographiclib_version}")

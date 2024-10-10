@@ -15,7 +15,7 @@ if (NOT EXISTS ${scpm_work_dir}/geographiclib-${scpm_geographiclib_version}.inst
     if (NOT scpm_geographiclib_clone_reult EQUAL "0")
         message(FATAL_ERROR "[SCPM] cannot clone repos ${scpm_geographiclib_repo}")
     endif()
-    scpm_build_cmake("${scpm_work_dir}/geographiclib-${scpm_geographiclib_version}" "-DBUILD_SHARED_LIBS=OFF")
+    scpm_build_cmake("${scpm_work_dir}/geographiclib-${scpm_geographiclib_version}" "-DBUILD_SHARED_LIBS=OFF" "-DCMAKE_CXX_FLAGS=\"-Wno-shorten-64-to-32\"")
     file(WRITE ${scpm_work_dir}/geographiclib-${scpm_geographiclib_version}.installed)
 endif()
 if(scpm_platform_windows)

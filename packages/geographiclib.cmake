@@ -20,21 +20,21 @@ if (NOT EXISTS ${scpm_work_dir}/geographiclib-${scpm_geographiclib_version}.inst
 endif()
 if(scpm_platform_windows)
     set(scpm_geographiclib_lib
-        geographiclib
+        GeographicLib
         CACHE STRING ""
     )
     set(scpm_geographiclib_lib_debug
-        geographiclibd
+        GeographicLib_d
         CACHE STRING ""
     )
 elseif(scpm_platform_macos)
     set(scpm_geographiclib_lib
-        geographiclib
+        GeographicLib
         CACHE STRING ""
     )
 else()
     set(scpm_geographiclib_lib
-        geographiclib
+        GeographicLib
         CACHE STRING ""
     )
 endif()

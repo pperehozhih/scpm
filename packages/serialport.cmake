@@ -17,6 +17,17 @@ set(scpm_serialport_lib_debug
     serialportd
     CACHE STRING ""
 )
+if(scpm_platform_macos)
+    set(scpm_serialport_lib ${scpm_serialport_lib}
+        "-framework IOKit"
+        "-framework CoreFoundation"
+    )
+elseif(scpm_platform_ios)
+    set(scpm_serialport_lib ${scpm_serialport_lib}
+        "-framework IOKit"
+        "-framework CoreFoundation"
+    )
+endif()
 set(scpm_serialport_depends
     ""
     CACHE STRING ""

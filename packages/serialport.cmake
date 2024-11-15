@@ -9,25 +9,30 @@ if (NOT EXISTS ${scpm_work_dir}/serialport-${scpm_serialport_version}.installed)
     file(WRITE ${scpm_work_dir}/serialport-${scpm_serialport_version}.installed)
 endif()
 
-set(scpm_serialport_lib
-    serialport
-    CACHE STRING ""
-)
+if(scpm_platform_macos)
+    set(scpm_serialport_lib ${scpm_serialport_lib}
+        serialport
+        "-framework IOKit"
+        "-framework CoreFoundation"
+        CACHE STRING ""
+    )
+elseif(scpm_platform_ios)
+    set(scpm_serialport_lib ${scpm_serialport_lib}
+        serialport
+        "-framework IOKit"
+        "-framework CoreFoundation"
+        CACHE STRING ""
+    )
+else()
+    set(scpm_serialport_lib
+        serialport
+        CACHE STRING ""
+    )
+endif()
 set(scpm_serialport_lib_debug
     serialportd
     CACHE STRING ""
 )
-if(scpm_platform_macos)
-    set(scpm_serialport_lib ${scpm_serialport_lib}
-        "-framework IOKit"
-        "-framework CoreFoundation"
-    )
-elseif(scpm_platform_ios)
-    set(scpm_serialport_lib ${scpm_serialport_lib}
-        "-framework IOKit"
-        "-framework CoreFoundation"
-    )
-endif()
 set(scpm_serialport_depends
     ""
     CACHE STRING ""

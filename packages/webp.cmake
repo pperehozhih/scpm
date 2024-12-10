@@ -9,7 +9,7 @@ if (NOT EXISTS ${scpm_work_dir}/webp-${scpm_webp_version}.installed)
     file(WRITE ${scpm_work_dir}/webp-${scpm_webp_version}.installed)
 endif()
 if(scpm_platform_windows)
-    set(scpm_brotli_lib
+    set(scpm_webp_lib
         sharpyuv
         webp
         webpdecoder
@@ -17,7 +17,7 @@ if(scpm_platform_windows)
         webpmux    
         CACHE STRING ""
     )
-    set(scpm_brotli_lib_debug
+    set(scpm_webp_lib_debug
         sharpyuvd
         webpd
         webpdecoderd
@@ -26,7 +26,7 @@ if(scpm_platform_windows)
         CACHE STRING ""
     )
 else()
-    set(scpm_brotli_lib
+    set(scpm_webp_lib
         sharpyuv
         webp
         webpdecoder
@@ -35,7 +35,7 @@ else()
         CACHE STRING ""
     )
 endif()
-set(scpm_brotli_depends
+set(scpm_webp_depends
     ""
     CACHE STRING ""
 )

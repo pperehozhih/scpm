@@ -19,7 +19,7 @@ if (NOT EXISTS ${scpm_work_dir}/curl-${scpm_curl_version}.installed)
     if (NOT scpm_curl_clone_reult EQUAL "0")
         message(FATAL_ERROR "[SCPM] cannot clone repos ${scpm_curl_repo}")
     endif()
-    scpm_build_cmake("${scpm_work_dir}/curl-${scpm_curl_version}" "")
+    scpm_build_cmake("${scpm_work_dir}/curl-${scpm_curl_version}" "-DCURL_BUILD_TESTING=OFF" "-DBUILD_SHARED_LIBS=OFF" "-DBUILD_STATIC_LIBS=OFF" "-DBUILD_CURL_EXE=OFF" "-DCURL_USE_WOLFSSL=ON" "-DUSE_NGHTTP2=OFF" "-DCURL_USE_LIBSSH2=OFF" "-DHTTP_ONLY=ON" "-DUSE_LIBIDN2=OFF" "-DCURL_USE_LIBPSL=OFF")
     file(WRITE ${scpm_work_dir}/curl-${scpm_curl_version}.installed)
 endif()
 

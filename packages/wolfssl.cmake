@@ -5,7 +5,7 @@ set(scpm_wolfssl_repo "https://github.com/wolfSSL/wolfssl")
 
 if (NOT EXISTS ${scpm_work_dir}/wolfssl-${scpm_wolfssl_version}.installed)
     scpm_download_github_archive("${scpm_wolfssl_repo}" "v${scpm_wolfssl_version}")
-    scpm_build_cmake("${scpm_work_dir}/wolfssl-${scpm_wolfssl_version}" "-DBUILD_SHARED_LIBS=OFF" "-DWOLFSSL_OPENSSLEXTRA=ON")
+    scpm_build_cmake("${scpm_work_dir}/wolfssl-${scpm_wolfssl_version}" "-DBUILD_SHARED_LIBS=OFF" "-DWOLFSSL_OPENSSLEXTRA=ON" "-DCRYPT_TESTS_DEFAULT=OFF")
     file(WRITE ${scpm_work_dir}/wolfssl-${scpm_wolfssl_version}.installed)
 endif()
 

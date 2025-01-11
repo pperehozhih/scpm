@@ -246,8 +246,12 @@ function(scpm_build_cmake)
             message(FATAL_ERROR "[SCPM] cannot build and install ${directory}")
         endif()
     else()
+		if (CMAKE_GENERATOR_PLATFORM)
+			message("[SCPM] Build for platform ${CMAKE_GENERATOR_PLATFORM}")
+			set(buildargs ${buildargs} "-A ${CMAKE_GENERATOR_PLATFORM}")
+		endif()
         execute_process(
-                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_DEBUG_POSTFIX=d ${buildargs} -A ${CMAKE_VS_PLATFORM_TOOLSET_HOST_ARCHITECTURE}
+                COMMAND ${CMAKE_COMMAND} .. -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${scpm_root_dir} -DCMAKE_DEBUG_POSTFIX=d ${buildargs}
                 WORKING_DIRECTORY "${directory}/scpm_build_dir"
                 RESULT_VARIABLE scpm_build_cmake_result
         )

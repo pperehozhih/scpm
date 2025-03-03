@@ -10,7 +10,7 @@ if (NOT scpm_imgui_glfw_version)
     set(scpm_imgui_glfw_version "master" CACHE STRING "")
 endif()
 if (NOT scpm_imgui_glfw_imgui_version)
-    set(scpm_imgui_glfw_imgui_version "v1.85" CACHE STRING "")
+    set(scpm_imgui_glfw_imgui_version "v1.91.8" CACHE STRING "")
 endif()
 set(scpm_imgui_glfw_repo "https://github.com/pperehozhih/imgui_glfw")
 

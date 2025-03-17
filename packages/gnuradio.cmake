@@ -1,7 +1,7 @@
 if (NOT scpm_gnuradio_version)
     set(scpm_gnuradio_version "2.12.0" CACHE STRING "")
 endif()
-scpm_install(pybind)
+scpm_install(pybind11)
 set(scpm_gnuradio_repo "https://github.com/gnuradio/gnuradio")
 
 if (NOT EXISTS ${scpm_work_dir}/gnuradio-${scpm_gnuradio_version}.installed)
@@ -19,6 +19,6 @@ set(scpm_gnuradio_lib_debug
     CACHE STRING ""
 )
 set(scpm_gnuradio_depends
-    pybind
+    pybind11
     CACHE STRING ""
 )

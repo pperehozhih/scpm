@@ -1,5 +1,5 @@
 if (NOT scpm_openal_soft_version)
-    set(scpm_openal_soft_version "1.19.1" CACHE STRING "")
+    set(scpm_openal_soft_version "1.24.2" CACHE STRING "")
 endif()
 set(scpm_openal_soft_repo "https://github.com/kcat/openal-soft")
 

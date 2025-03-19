@@ -10,7 +10,11 @@ endif()
 
 if (NOT EXISTS ${scpm_work_dir}/libiio-${scpm_libiio_version}.installed)
     scpm_download_github_archive("${scpm_libiio_repo}" "v${scpm_libiio_version}")
-    scpm_build_cmake("${scpm_work_dir}/libiio-${scpm_libiio_version}" "-DOSX_FRAMEWORK=OFF")
+    if(scpm_platform_windows)
+        scpm_build_cmake("${scpm_work_dir}/libiio-${scpm_libiio_version}" "-DOSX_FRAMEWORK=OFF" "-DLIBUSB_LIBRARIES=${scpm_root_dir}/lib/usb-1.0.lib" "-DLIBUSB_INCLUDE_DIR=${scpm_root_dir}/include/libusb-1.0" "-DWITH_TESTS=OFF")
+    else()
+        scpm_build_cmake("${scpm_work_dir}/libiio-${scpm_libiio_version}" "-DOSX_FRAMEWORK=OFF" "-DLIBUSB_LIBRARIES=${scpm_root_dir}/lib/libusb-1.0.a" "-DLIBUSB_INCLUDE_DIR=${scpm_root_dir}/include/libusb-1.0" "-DWITH_TESTS=OFF")
+    endif()
     file(WRITE ${scpm_work_dir}/libiio-${scpm_libiio_version}.installed "")
 endif()
 

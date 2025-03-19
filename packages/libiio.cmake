@@ -4,6 +4,9 @@ endif()
 set(scpm_libiio_repo "https://github.com/analogdevicesinc/libiio")
 
 scpm_install(libusb)
+if(scpm_platform_windows)
+    scpm_install(libxml2)
+endif()
 
 if (NOT EXISTS ${scpm_work_dir}/libiio-${scpm_libiio_version}.installed)
     scpm_download_github_archive("${scpm_libiio_repo}" "v${scpm_libiio_version}")

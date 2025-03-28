@@ -336,6 +336,7 @@ function(scpm_create_target)
     install(TARGETS ${scpm_create_target_TARGET}
         RUNTIME DESTINATION "${scpm_root_dir}/bin"
         LIBRARY DESTINATION "${scpm_root_dir}/lib"
+        BUNDLE DESTINATION "${scpm_root_dir}/bin"
     )
     set_target_properties(${scpm_create_target_TARGET}
         PROPERTIES

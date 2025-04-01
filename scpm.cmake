@@ -382,6 +382,13 @@ function(scpm_create_target)
 
 endfunction(scpm_create_target)
 
+function(scpm_file_patch filename from to)
+    file(READ ${filename} scpm_file_content)
+    string(REPLACE "${from}" "${to}" scpm_file_content "${scpm_file_content}")
+    file(WRITE ${filename} "${scpm_file_content}")
+    message("${filename} - file patched")
+endfunction(scpm_file_patch)
+
 function(scpm_link_target)
     set(options "")
     set(one_value_args TARGET)

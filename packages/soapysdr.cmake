@@ -1,7 +1,7 @@
 if (NOT scpm_soapysdr_version)
     set(scpm_soapysdr_version "master" CACHE STRING "")
 endif()
-set(scpm_soapysdr_repo "https://github.com/pothosware/SoapySDR")
+set(scpm_soapysdr_repo "https://gitflic.ru/project/paul2la/soapysdr-android.git")
 
 if (NOT EXISTS ${scpm_work_dir}/soapysdr-${scpm_soapysdr_version}.installed)
     if(EXISTS "${scpm_work_dir}/soapysdr-${scpm_soapysdr_version}")

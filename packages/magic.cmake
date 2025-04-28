@@ -16,8 +16,8 @@ if (NOT EXISTS ${scpm_work_dir}/magic-${scpm_magic_version}.installed)
         message(FATAL_ERROR "[SCPM] cannot clone repos ${scpm_magic_repo}")
     endif()
     # Hack for disable build utils
-    set(buildargs "-DBUILD_magic_UTILS=OFF" "-DBUILD_MEMTEST_UTILS=OFF")
-    scpm_build_cmake("${scpm_work_dir}/magic-${scpm_magic_version}" "${buildargs}")
+    set(buildargs "-DBUILD_FILE_UTILS=OFF" "-DBUILD_MEMTEST_UTILS=OFF")
+    scpm_build_cmake("${scpm_work_dir}/magic-${scpm_magic_version}/cmake" "${buildargs}")
     magic(WRITE ${scpm_work_dir}/magic-${scpm_magic_version}.installed)
 endif()
 

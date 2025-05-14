@@ -202,6 +202,7 @@ function(scpm_build_cmake)
     list(REMOVE_AT ARGN 0)
     set (buildargs ${ARGN})
     message("[SCPM] begin build ${directory} for ${CMAKE_SYSTEM_NAME}")
+    set(ENV{PKG_CONFIG_PATH} "${scpm_root_dir}/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E make_directory "${directory}/scpm_build_dir"
         WORKING_DIRECTORY "${directory}"

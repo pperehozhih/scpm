@@ -10,7 +10,11 @@ set(scpm_glfw_repo "https://github.com/glfw/glfw")
 
 if (NOT EXISTS ${scpm_work_dir}/glfw-${scpm_glfw_version}.installed)
     scpm_download_github_archive("${scpm_glfw_repo}" "${scpm_glfw_version}")
-    scpm_build_cmake("${scpm_work_dir}/glfw-${scpm_glfw_version}" "")
+    if (CROSS_WIN)
+        scpm_build_cmake("${scpm_work_dir}/glfw-${scpm_glfw_version}" "-DGLFW_BUILD_EXAMPLES=OFF" "-DGLFW_BUILD_TESTS=OFF")
+    else()
+        scpm_build_cmake("${scpm_work_dir}/glfw-${scpm_glfw_version}" "")
+    endif()
     file(WRITE ${scpm_work_dir}/glfw-${scpm_glfw_version}.installed)
 endif()
 

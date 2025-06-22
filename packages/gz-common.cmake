@@ -5,6 +5,9 @@ endif()
 set(scpm_gz_common_repo "https://github.com/gazebosim/gz-common")
 
 scpm_install(gz-utils)
+scpm_install(freeimage)
+scpm_install(assimp)
+scpm_install(gdal)
 
 if (NOT EXISTS ${scpm_work_dir}/gz_common-${scpm_gz_common_version_major}-${scpm_gz_common_version}.installed)
     scpm_download_github_archive("${scpm_gz_common_repo}" "gz-common${scpm_gz_common_version_major}_${scpm_gz_common_version}")

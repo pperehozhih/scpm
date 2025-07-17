@@ -1,7 +1,7 @@
 if (scpm_imgui_lib)
     message(FATAL_ERROR "imgui_glfw package conflict with original imgui")
 endif()
-set(scpm_glfw_version "3.2.1" CACHE STRING "")
+#set(scpm_glfw_version "3.2.1" CACHE STRING "")
 scpm_install(glfw)
 scpm_install(freetype)
 scpm_install(glm)

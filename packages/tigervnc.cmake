@@ -4,7 +4,7 @@ endif()
 set(scpm_tigervnc_repo "https://github.com/TigerVNC/tigervnc.git")
 
 if (NOT EXISTS ${scpm_work_dir}/tigervnc-${scpm_tigervnc_version}.installed)
-    scpm_download_github_archive("${scpm_tigervnc_repo}" "v${scpm_tigervnc_version}")
+    scpm_download_github_tag_archive("${scpm_tigervnc_repo}" "v${scpm_tigervnc_version}")
     scpm_build_cmake("${scpm_work_dir}/tigervnc-${scpm_tigervnc_version}")
     file(WRITE ${scpm_work_dir}/tigervnc-${scpm_tigervnc_version}.installed)
 endif()

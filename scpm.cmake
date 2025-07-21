@@ -48,6 +48,22 @@ function(scpm_download_github_archive url filename)
     file(REMOVE ${scpm_work_dir}/${filename}.zip)
 endfunction(scpm_download_github_archive)
 
+function(scpm_download_github_tag_archive url filename)
+    message("[SCPM] download archive ${url}/archive/refs/tags/${filename}.zip to ${scpm_work_dir}/${filename}.zip")
+    file(DOWNLOAD ${url}/archive/refs/tags/${filename}.zip ${scpm_work_dir}/${filename}.zip)
+    message("[SCPM] extract archive ${scpm_work_dir}/${filename}.zip")
+    execute_process(
+            COMMAND ${CMAKE_COMMAND} -E tar xzf ${scpm_work_dir}/${filename}.zip
+            WORKING_DIRECTORY ${scpm_work_dir}
+            RESULT_VARIABLE scpm_download_github_archive_result
+    )
+    if (NOT scpm_download_github_archive_result EQUAL "0")
+        message(FATAL_ERROR "[SCPM] cannot extract archive ${scpm_work_dir}/${filename}.zip")
+    endif()
+    message("[SCPM] remove archive ${scpm_work_dir}/${filename}.zip")
+    file(REMOVE ${scpm_work_dir}/${filename}.zip)
+endfunction(scpm_download_github_tag_archive)
+
 function(scpm_clone_git url branch)
     if (NOT branch)
         set(branch "master")

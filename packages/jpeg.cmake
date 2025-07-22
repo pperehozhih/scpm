@@ -1,5 +1,5 @@
 if (NOT scpm_jpeg_version)
-    set(scpm_jpeg_version "2.0.2" CACHE STRING "")
+    set(scpm_jpeg_version "3.1.1" CACHE STRING "")
 endif()
 set(scpm_jpeg_repo "https://github.com/libjpeg-turbo/libjpeg-turbo")
 

@@ -346,7 +346,7 @@ function(scpm_group_sources_recursive base_dir root_folder)
         ABSOULTE "${base_dir}"
         "${base_dir}/*.*"
     )
-
+    list(SORT all_files)
     set(last_dir "")
     set(files "")
     foreach(file ${all_files})
@@ -356,9 +356,9 @@ function(scpm_group_sources_recursive base_dir root_folder)
         else()
             string(REPLACE "${base_dir}/" "" dir ${dir_raw})
         endif()
-        message("${dir}")
         if(NOT "${dir}" STREQUAL "${last_dir}")
             if(files)
+                message("${root_folder}/${last_dir} -- ${files}")
                 source_group("${root_folder}/${last_dir}" FILES ${files})
             endif()
             set(files "")
@@ -377,11 +377,13 @@ function(scpm_create_root_source_group target)
         ABSOULTE "${scpm_root_dir}/include"
         "${scpm_root_dir}/include/*.*"
     )
-    message("${all_files}")
     target_sources(${target}
         PRIVATE
         ${all_files}
     )
+    foreach(file ${all_files})
+        set_source_files_properties(${file} PROPERTIES HEADER_FILE_ONLY ON)
+    endforeach()
     scpm_group_sources_recursive("${scpm_root_dir}/include" "root")
 endfunction()
 
@@ -456,7 +458,6 @@ function(scpm_create_target)
         else()
             string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" dir ${dir_raw})
         endif()
-        message("${dir}")
         if(NOT "${dir}" STREQUAL "${last_dir}")
             if(files)
                 source_group("${last_dir}" FILES ${files})

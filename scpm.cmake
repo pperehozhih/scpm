@@ -341,18 +341,50 @@ function(scpm_debugger_setup target)
     endif()
 endfunction(scpm_debugger_setup)
 
-function(scpm_group_sources_recursive base_dir)
+function(scpm_group_sources_recursive base_dir root_folder)
     file(GLOB_RECURSE all_files
-        RELATIVE "${base_dir}"
+        ABSOULTE "${base_dir}"
         "${base_dir}/*.*"
     )
 
-    foreach(file_path IN LISTS all_files)
-        get_filename_component(file_dir "${file_path}" PATH)
-        string(REPLACE "/" "\\" group_path "${file_dir}")
-        source_group("${group_path}" FILES "${base_dir}/${file_path}")
+    set(last_dir "")
+    set(files "")
+    foreach(file ${all_files})
+        get_filename_component(dir_raw "${file}" PATH)
+        if("${dir_raw}" STREQUAL "")
+            set(dir "")
+        else()
+            string(REPLACE "${base_dir}/" "" dir ${dir_raw})
+        endif()
+        message("${dir}")
+        if(NOT "${dir}" STREQUAL "${last_dir}")
+            if(files)
+                source_group("${root_folder}/${last_dir}" FILES ${files})
+            endif()
+            set(files "")
+        endif()
+        set(files ${files} ${file})
+        set(last_dir "${dir}")
     endforeach()
+
+    if(files)
+        source_group("${root_folder}" FILES ${files})
+    endif()
 endfunction()
+
+function(scpm_create_root_source_group target)
+    file(GLOB_RECURSE all_files
+        ABSOULTE "${scpm_root_dir}/include"
+        "${scpm_root_dir}/include/*.*"
+    )
+    message("${all_files}")
+    target_sources(${target}
+        PRIVATE
+        ${all_files}
+    )
+    scpm_group_sources_recursive("${scpm_root_dir}/include" "root")
+endfunction()
+
 
 function(scpm_create_target)
     set(options "")
@@ -438,9 +470,6 @@ function(scpm_create_target)
     if(files)
         source_group("${last_dir}" FILES ${files})
     endif()
-
-    scpm_group_sources_recursive("${scpm_root_dir}/include")
-
 endfunction(scpm_create_target)
 
 function(scpm_file_patch filename from to)

@@ -341,6 +341,19 @@ function(scpm_debugger_setup target)
     endif()
 endfunction(scpm_debugger_setup)
 
+function(scpm_group_sources_recursive base_dir)
+    file(GLOB_RECURSE all_files
+        RELATIVE "${base_dir}"
+        "${base_dir}/*.*"
+    )
+
+    foreach(file_path IN LISTS all_files)
+        get_filename_component(file_dir "${file_path}" PATH)
+        string(REPLACE "/" "\\" group_path "${file_dir}")
+        source_group("${group_path}" FILES "${base_dir}/${file_path}")
+    endforeach()
+endfunction()
+
 function(scpm_create_target)
     set(options "")
     set(one_value_args TARGET)
@@ -426,6 +439,7 @@ function(scpm_create_target)
         source_group("${last_dir}" FILES ${files})
     endif()
 
+    scpm_group_sources_recursive("${scpm_root_dir}/include")
 
 endfunction(scpm_create_target)
 

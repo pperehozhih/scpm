@@ -1,5 +1,5 @@
 if (NOT scpm_freetype_version)
-    set(scpm_freetype_version "VER-2-10-4" CACHE STRING "")
+    set(scpm_freetype_version "VER-2-13-3" CACHE STRING "")
 endif()
 scpm_install(png)
 scpm_install(bzip2)

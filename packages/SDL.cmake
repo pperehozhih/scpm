@@ -1,7 +1,7 @@
 if (NOT scpm_SDL_version)
-    set(scpm_SDL_version "2.0.8" CACHE STRING "")
+    set(scpm_SDL_version "2.32.10" CACHE STRING "")
 endif()
-set(scpm_SDL_repo "https://github.com/SDL-mirror/SDL")
+set(scpm_SDL_repo "https://github.com/libsdl-org/SDL")
 
 if (NOT EXISTS ${scpm_work_dir}/SDL-${scpm_SDL_version}.installed)
     scpm_download_github_archive("${scpm_SDL_repo}" "release-${scpm_SDL_version}")

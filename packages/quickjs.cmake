@@ -5,7 +5,7 @@ set(scpm_quickjs_repo "https://github.com/pperehozhih/quickjs")
 
 if (NOT EXISTS ${scpm_work_dir}/quickjs-${scpm_quickjs_version}.installed)
     scpm_download_github_archive("${scpm_quickjs_repo}" "v${scpm_quickjs_version}")
-    scpm_build_cmake("${scpm_work_dir}/quickjs-${scpm_quickjs_version}")
+    scpm_build_cmake("${scpm_work_dir}/quickjs-${scpm_quickjs_version}" "-DQJS_BUILD_TOOLS=OFF")
     file(WRITE ${scpm_work_dir}/quickjs-${scpm_quickjs_version}.installed)
 endif()
 if(scpm_platform_windows)

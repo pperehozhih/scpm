@@ -10,13 +10,16 @@ if (NOT EXISTS ${scpm_work_dir}/quickjs-${scpm_quickjs_version}.installed)
 endif()
 if(scpm_platform_windows)
     set(scpm_quickjs_lib
+        quickjs
         CACHE STRING ""
     )
     set(scpm_quickjs_lib_debug
+        quickjsd
         CACHE STRING ""
     )
 else()
     set(scpm_quickjs_lib
+        quickjs
         CACHE STRING ""
     )
 endif()

@@ -11,4 +11,4 @@ include_directories("${scpm_root_dir}/include")
 link_directories("${scpm_root_dir}/lib")
 add_executable(${PROJECT_NAME} main.cpp)
 
-scpm_link_target(TARGET ${PROJECT_NAME} LIBS tigervnc)
+scpm_link_target(TARGET ${PROJECT_NAME} LIBS quickjs)

@@ -1,11 +1,11 @@
 if (NOT scpm_wolfssl_version)
-    set(scpm_wolfssl_version "5.7.4-stable" CACHE STRING "")
+    set(scpm_wolfssl_version "5.8.2-stable" CACHE STRING "")
 endif()
 set(scpm_wolfssl_repo "https://github.com/wolfSSL/wolfssl")
 
 if (NOT EXISTS ${scpm_work_dir}/wolfssl-${scpm_wolfssl_version}.installed)
     scpm_download_github_archive("${scpm_wolfssl_repo}" "v${scpm_wolfssl_version}")
-    scpm_build_cmake("${scpm_work_dir}/wolfssl-${scpm_wolfssl_version}" "-DBUILD_SHARED_LIBS=OFF" "-DWOLFSSL_OPENSSLEXTRA=ON" "-DCRYPT_TESTS_DEFAULT=OFF" "-DWOLFSSL_EXAMPLES=OFF" "-DWOLFSSL_CRYPT_TESTS=OFF")
+    scpm_build_cmake("${scpm_work_dir}/wolfssl-${scpm_wolfssl_version}" "-DBUILD_SHARED_LIBS=OFF" "-DWOLFSSL_OPENSSLEXTRA=ON" "-DCRYPT_TESTS_DEFAULT=OFF" "-DWOLFSSL_EXAMPLES=OFF" "-DWOLFSSL_CRYPT_TESTS=OFF" "-DWOLFSSL_OPENSSLALL=ON" "-DWOLFSSL_WPAS=ON" "-DWOLFSSL_QUIC=ON" "-DWOLFSSL_PSK=ON" "-DWOLFSSL_CERTGEN=ON" "-DWOLFSSL_SRTP=ON" "-DSESSION_CERTS=ON" "-DCMAKE_C_FLAGS=-DSESSION_CERTS")
     file(WRITE ${scpm_work_dir}/wolfssl-${scpm_wolfssl_version}.installed)
 endif()
 

@@ -19,7 +19,7 @@ if(scpm_platform_windows)
     )
 else()
     set(scpm_libtins_lib
-        libtins
+        tins
         CACHE STRING ""
     )
 endif()
